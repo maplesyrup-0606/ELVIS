@@ -237,6 +237,44 @@ def llava_conversation(train_positive, train_negative, principle):
     return conversation
 
 
+def internVL_zs_named_question(principle):
+    return (f"<image>\nDoes this image exhibit the Gestalt principle of {principle}? "
+            f"Answer only: yes or no.")
+
+
+def internVL_zs_blind_question():
+    return ("<image>\nAre the objects in this image visually grouped into distinct clusters? "
+            "Answer only: yes or no.")
+
+
+def llava_zs_named_conversation(image, principle):
+    return [
+        {
+            "role": "user",
+            "content": [
+                {"type": "image", "image": image},
+                {"type": "text",
+                 "text": (f"Does this image exhibit the Gestalt principle of {principle}? "
+                          f"Answer only: yes or no.")},
+            ],
+        }
+    ]
+
+
+def llava_zs_blind_conversation(image):
+    return [
+        {
+            "role": "user",
+            "content": [
+                {"type": "image", "image": image},
+                {"type": "text",
+                 "text": ("Are the objects in this image visually grouped into distinct clusters? "
+                          "Answer only: yes or no.")},
+            ],
+        }
+    ]
+
+
 def internVL_eval_question(logic_rules):
     return (f"Using the following reasoning rules: "
             f"{logic_rules}. "

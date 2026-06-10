@@ -260,6 +260,143 @@ def run_llava(data_path, img_size, principle, batch_size, device, img_num, epoch
     return avg_accuracy, avg_f1
 
 
+def evaluate_llm_zeroshot(model, processor, test_images, device, principle, mode):
+    """
+    test_images: list of (PIL Image, label, image_id) triples
+    Returns: accuracy, f1, precision, recall, ambiguous_count, samples list
+    """
+    model.eval()
+    correct, total, ambiguous = 0, 0, 0
+    all_labels, all_predictions = [], []
+    samples = []
+    torch.cuda.empty_cache()
+    for image, label, img_id in test_images:
+        if mode == "named":
+            conversation = conversations.llava_zs_named_conversation(image, principle)
+        else:
+            conversation = conversations.llava_zs_blind_conversation(image)
+        inputs = processor.apply_chat_template(
+            [conversation],
+            add_generation_prompt=True,
+            tokenize=True,
+            return_dict=True,
+            padding=True,
+            return_tensors="pt",
+        ).to(model.device, torch.float16)
+        generate_ids = model.generate(**inputs, max_new_tokens=32)
+        prediction = processor.decode(generate_ids[0], skip_special_tokens=True,
+                                      clean_up_tokenization_spaces=False)
+        response = prediction.split(".assistant")[-1]
+        print(f"[zs_{mode}] {img_id} → {response}")
+        resp_lower = response.lower()
+        if "yes" in resp_lower:
+            predicted_label = 1
+        elif "no" in resp_lower:
+            predicted_label = 0
+        else:
+            ambiguous += 1
+            samples.append({"id": img_id, "label": label, "predicted": None, "response": response})
+            print(f"[zs_{mode}] Ambiguous (excluded): {response}")
+            continue
+        all_labels.append(label)
+        all_predictions.append(predicted_label)
+        samples.append({"id": img_id, "label": label, "predicted": predicted_label, "response": response})
+        total += 1
+        correct += (predicted_label == label)
+
+    accuracy = 100 * correct / total if total > 0 else 0
+    TN, FP, FN, TP = data_utils.confusion_matrix_elements(all_predictions, all_labels)
+    precision, recall, f1_score = data_utils.calculate_metrics(TN, FP, FN, TP)
+    wandb.log({
+        f"{principle}/test_accuracy": accuracy,
+        f"{principle}/f1_score": f1_score,
+        f"{principle}/precision": precision,
+        f"{principle}/recall": recall,
+        f"{principle}/ambiguous": ambiguous,
+    })
+    print(f"({principle}/zs_{mode}) Acc: {accuracy:.2f}% | F1: {f1_score:.4f} | "
+          f"P: {precision:.4f} | R: {recall:.4f} | Ambiguous: {ambiguous}")
+    return accuracy, f1_score, precision, recall, ambiguous, samples
+
+
+def _run_llava_zs(data_path, img_size, principle, batch_size, device, img_num,
+                  start_num, task_num, mode):
+    from datetime import date
+    init_wandb(batch_size, principle)
+    model, processor = load_llava_model(device)
+    principle_path = Path(data_path)
+    pattern_folders = sorted([p for p in (principle_path / "test").iterdir() if p.is_dir()],
+                              key=lambda x: x.stem)
+    if not pattern_folders:
+        print("No pattern folders found in", principle_path / "test")
+        return
+
+    if task_num != "full":
+        task_num = int(task_num)
+        pattern_folders = pattern_folders[start_num:start_num + task_num]
+
+    rtpt = RTPT(name_initials='JIS',
+                experiment_name=f'Elvis-LLaVA-ZS-{mode[:1].upper()}-{principle}',
+                max_iterations=len(pattern_folders))
+    rtpt.start()
+
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = Path(f"/elvis_result/{principle}/zeroshot/{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
+    filename = f"llava_zs_{mode}_{img_size}_{timestamp}_img_num_{img_num}.json"
+    tmp_path = output_dir / f"{filename}.tmp.json"
+    final_path = output_dir / filename
+
+    total_accuracy, total_f1, total_precision, total_recall = [], [], [], []
+    results = {}
+
+    for pattern_folder in pattern_folders:
+        rtpt.step()
+        print(f"Evaluating pattern: {pattern_folder.name}")
+        test_positive = load_images(pattern_folder / "positive", img_size, img_num)
+        test_negative = load_images(pattern_folder / "negative", img_size, img_num)
+        test_images = (
+            [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
+            [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
+        )
+
+        accuracy, f1, precision, recall, ambiguous, samples = evaluate_llm_zeroshot(
+            model, processor, test_images, device, principle, mode)
+
+        results[pattern_folder.name] = {
+            "accuracy": accuracy, "f1_score": f1,
+            "precision": precision, "recall": recall,
+            "ambiguous": ambiguous,
+            "samples": samples,
+        }
+        total_accuracy.append(accuracy)
+        total_f1.append(f1)
+        total_precision.append(precision)
+        total_recall.append(recall)
+
+        with open(tmp_path, "w") as f:
+            json.dump(results, f, indent=4)
+
+    avg_accuracy = sum(total_accuracy) / len(total_accuracy) if total_accuracy else 0
+    avg_f1 = sum(total_f1) / len(total_f1) if total_f1 else 0
+
+    os.replace(tmp_path, final_path)
+    print(f"Results saved to {final_path}")
+    print(f"Overall Avg Acc: {avg_accuracy:.2f}% | Avg F1: {avg_f1:.4f}")
+    wandb.finish()
+    return avg_accuracy, avg_f1
+
+
+def run_llava_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    return _run_llava_zs(data_path, img_size, principle, batch_size, device, img_num,
+                          start_num, task_num, mode="named")
+
+
+def run_llava_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    return _run_llava_zs(data_path, img_size, principle, batch_size, device, img_num,
+                          start_num, task_num, mode="blind")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate LLaVA on Gestalt Reasoning Benchmark.")
     parser.add_argument("--device_id", type=int, help="Specify GPU device ID. If not provided, CPU will be used.")

@@ -24,6 +24,20 @@ baseline_models = {
     "internVL_X_no_principle": internVL.run_internVL_X_no_principle_given,
     "llava": llava.run_llava,
     "llava_no_principle": llava.run_llava_no_principle,
+    # --- zero-shot named (principle name given, no examples) ---
+    "internVL_zs_named":     internVL.run_internVL_zs_named,
+    "internVL_8B_zs_named":  internVL.run_internVL_8B_zs_named,
+    "internVL_14B_zs_named": internVL.run_internVL_14B_zs_named,
+    "internVL_38B_zs_named": internVL.run_internVL_38B_zs_named,
+    "internVL_X_zs_named":   internVL.run_internVL_X_zs_named,
+    "llava_zs_named":        llava.run_llava_zs_named,
+    # --- zero-shot blind (no principle name, no examples) ---
+    "internVL_zs_blind":     internVL.run_internVL_zs_blind,
+    "internVL_8B_zs_blind":  internVL.run_internVL_8B_zs_blind,
+    "internVL_14B_zs_blind": internVL.run_internVL_14B_zs_blind,
+    "internVL_38B_zs_blind": internVL.run_internVL_38B_zs_blind,
+    "internVL_X_zs_blind":   internVL.run_internVL_X_zs_blind,
+    "llava_zs_blind":        llava.run_llava_zs_blind,
 }
 
 

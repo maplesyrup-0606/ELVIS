@@ -224,6 +224,219 @@ def evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle):
     return accuracy, f1_score, precision, recall
 
 
+def load_intern_model_by_id(model_id, device):
+    torch.backends.cuda.enable_flash_sdp(False)
+    torch.backends.cuda.enable_mem_efficient_sdp(False)
+    torch.backends.cuda.enable_math_sdp(True)
+    model = AutoModel.from_pretrained(
+        model_id,
+        torch_dtype=torch.bfloat16,
+        low_cpu_mem_usage=True,
+        trust_remote_code=True).eval().cuda()
+    return model.to(device)
+
+
+def evaluate_llm_zeroshot(model, tokenizer, test_images, device, principle, mode):
+    """
+    test_images: list of (PIL Image, label, image_id) triples
+    Returns: accuracy, f1, precision, recall, ambiguous_count, samples list
+    """
+    model.eval()
+    correct, total, ambiguous = 0, 0, 0
+    all_labels, all_predictions = [], []
+    samples = []
+    generation_config = dict(max_new_tokens=32, do_sample=False)
+    torch.cuda.empty_cache()
+    for image, label, img_id in test_images:
+        if mode == "named":
+            question = conversations.internVL_zs_named_question(principle)
+        else:
+            question = conversations.internVL_zs_blind_question()
+        img = load_image(image).to(device=device, dtype=torch.bfloat16)
+        response = model.chat(tokenizer, img, question, generation_config)
+        print(f"[zs_{mode}] {img_id} → {response}")
+        resp_lower = response.lower()
+        if "yes" in resp_lower:
+            predicted_label = 1
+        elif "no" in resp_lower:
+            predicted_label = 0
+        else:
+            ambiguous += 1
+            samples.append({"id": img_id, "label": label, "predicted": None, "response": response})
+            print(f"[zs_{mode}] Ambiguous (excluded): {response}")
+            continue
+        all_labels.append(label)
+        all_predictions.append(predicted_label)
+        samples.append({"id": img_id, "label": label, "predicted": predicted_label, "response": response})
+        total += 1
+        correct += (predicted_label == label)
+
+    accuracy = 100 * correct / total if total > 0 else 0
+    TN, FP, FN, TP = data_utils.confusion_matrix_elements(all_predictions, all_labels)
+    precision, recall, f1_score = data_utils.calculate_metrics(TN, FP, FN, TP)
+    wandb.log({
+        f"{principle}/test_accuracy": accuracy,
+        f"{principle}/f1_score": f1_score,
+        f"{principle}/precision": precision,
+        f"{principle}/recall": recall,
+        f"{principle}/ambiguous": ambiguous,
+    })
+    print(f"({principle}/zs_{mode}) Acc: {accuracy:.2f}% | F1: {f1_score:.4f} | "
+          f"P: {precision:.4f} | R: {recall:.4f} | Ambiguous: {ambiguous}")
+    return accuracy, f1_score, precision, recall, ambiguous, samples
+
+
+def _run_internVL_zs(model, tokenizer, model_name, data_path, img_size, principle,
+                     batch_size, device, img_num, start_num, task_num, mode):
+    from datetime import date
+    init_wandb(batch_size, principle)
+    principle_path = Path(data_path)
+    pattern_folders = sorted([p for p in (principle_path / "test").iterdir() if p.is_dir()],
+                              key=lambda x: x.stem)
+    if not pattern_folders:
+        print("No pattern folders found in", principle_path / "test")
+        return
+
+    if task_num != "full":
+        task_num = int(task_num)
+        pattern_folders = pattern_folders[start_num:start_num + task_num]
+
+    rtpt = RTPT(name_initials='JIS',
+                experiment_name=f'Elvis-{model_name}-ZS-{mode[:1].upper()}-{principle}',
+                max_iterations=len(pattern_folders))
+    rtpt.start()
+
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = Path(f"/elvis_result/{principle}/zeroshot/{date_str}")
+    os.makedirs(output_dir, exist_ok=True)
+    filename = f"{model_name}_zs_{mode}_{img_size}_{timestamp}_img_num_{img_num}.json"
+    tmp_path = output_dir / f"{filename}.tmp.json"
+    final_path = output_dir / filename
+
+    total_accuracy, total_f1, total_precision, total_recall = [], [], [], []
+    results = {}
+
+    for pattern_folder in tqdm(pattern_folders):
+        rtpt.step()
+        print(f"Evaluating pattern: {pattern_folder.name}")
+        test_positive = load_images(pattern_folder / "positive", img_size, img_num)
+        test_negative = load_images(pattern_folder / "negative", img_size, img_num)
+        test_images = (
+            [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
+            [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
+        )
+
+        accuracy, f1, precision, recall, ambiguous, samples = evaluate_llm_zeroshot(
+            model, tokenizer, test_images, device, principle, mode)
+
+        results[pattern_folder.name] = {
+            "accuracy": accuracy, "f1_score": f1,
+            "precision": precision, "recall": recall,
+            "ambiguous": ambiguous,
+            "samples": samples,
+        }
+        total_accuracy.append(accuracy)
+        total_f1.append(f1)
+        total_precision.append(precision)
+        total_recall.append(recall)
+
+        with open(tmp_path, "w") as f:
+            json.dump(results, f, indent=4)
+
+        torch.cuda.empty_cache()
+
+    avg_accuracy = sum(total_accuracy) / len(total_accuracy) if total_accuracy else 0
+    avg_f1 = sum(total_f1) / len(total_f1) if total_f1 else 0
+
+    os.replace(tmp_path, final_path)
+    print(f"Results saved to {final_path}")
+    print(f"Overall Avg Acc: {avg_accuracy:.2f}% | Avg F1: {avg_f1:.4f}")
+    wandb.finish()
+    return avg_accuracy, avg_f1
+
+
+# ---------- 2B zero-shot ----------
+
+def run_internVL_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-2B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-2B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-2B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="named")
+
+
+def run_internVL_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-2B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-2B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-2B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="blind")
+
+
+# ---------- 8B zero-shot ----------
+
+def run_internVL_8B_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-8B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-8B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-8B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="named")
+
+
+def run_internVL_8B_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-8B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-8B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-8B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="blind")
+
+
+# ---------- 14B zero-shot ----------
+
+def run_internVL_14B_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-14B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-14B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-14B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="named")
+
+
+def run_internVL_14B_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-14B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-14B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-14B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="blind")
+
+
+# ---------- 38B zero-shot (single H100 80GB) ----------
+
+def run_internVL_38B_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-38B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-38B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-38B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="named")
+
+
+def run_internVL_38B_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-38B", device)
+    tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-38B", trust_remote_code=True, use_fast=False)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-38B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="blind")
+
+
+# ---------- 78B zero-shot (multi-GPU) ----------
+
+def run_internVL_X_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+    device_map = build_device_map_3gpus("OpenGVLab/InternVL3-78B")
+    model, tokenizer = load_internX_model(device_map=device_map, dtype=DTYPE)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-78B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="named")
+
+
+def run_internVL_X_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+    device_map = build_device_map_3gpus("OpenGVLab/InternVL3-78B")
+    model, tokenizer = load_internX_model(device_map=device_map, dtype=DTYPE)
+    return _run_internVL_zs(model, tokenizer, "InternVL3-78B", data_path, img_size, principle,
+                             batch_size, device, img_num, start_num, task_num, mode="blind")
+
+
 def split_model():
     device_map = {}
     world_size = torch.cuda.device_count()
