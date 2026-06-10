@@ -341,7 +341,7 @@ def _run_llava_zs(data_path, img_size, principle, batch_size, device, img_num,
     rtpt.start()
 
     date_str = date.today().strftime("%Y%m%d")
-    output_dir = Path(f"/elvis_result/{principle}/zeroshot/{date_str}")
+    output_dir = config.get_results_path(principle) / "zeroshot" / date_str
     os.makedirs(output_dir, exist_ok=True)
     filename = f"llava_zs_{mode}_{img_size}_{timestamp}_img_num_{img_num}.json"
     tmp_path = output_dir / f"{filename}.tmp.json"

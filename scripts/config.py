@@ -96,7 +96,10 @@ def get_coco_path(remote=False):
 
 
 def get_raw_patterns_path(remote=False):
-    if remote:
+    env_path = os.getenv("ELVIS_DATA")
+    if env_path:
+        raw_patterns_path = Path(env_path)
+    elif remote:
         raw_patterns_path = Path('/gen_data')
     else:
         raw_patterns_path = root / 'gen_data'
@@ -104,6 +107,13 @@ def get_raw_patterns_path(remote=False):
     if not os.path.exists(raw_patterns_path):
         os.makedirs(raw_patterns_path)
     return raw_patterns_path
+
+
+def get_results_path(principle):
+    env_path = os.getenv("ELVIS_RESULTS")
+    if env_path:
+        return Path(env_path) / principle
+    return Path(f"/elvis_result/{principle}")
 
 
 # -------------- llm path -----------------------

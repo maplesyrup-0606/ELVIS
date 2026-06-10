@@ -307,7 +307,7 @@ def _run_internVL_zs(model, tokenizer, model_name, data_path, img_size, principl
     rtpt.start()
 
     date_str = date.today().strftime("%Y%m%d")
-    output_dir = Path(f"/elvis_result/{principle}/zeroshot/{date_str}")
+    output_dir = config.get_results_path(principle) / "zeroshot" / date_str
     os.makedirs(output_dir, exist_ok=True)
     filename = f"{model_name}_zs_{mode}_{img_size}_{timestamp}_img_num_{img_num}.json"
     tmp_path = output_dir / f"{filename}.tmp.json"
