@@ -7,7 +7,10 @@
 #SBATCH --cpus-per-task=6
 #SBATCH --gpus=nvidia_h100_80gb_hbm3_1g.10gb:1
 
-source $HOME/venv/bin/activate
+module load python/3.11.5 cuda/12.6 opencv/4.13.0
+source $SCRATCH/venv/elvis/bin/activate
+export HF_HOME=$SCRATCH/hf_cache
+cd $SCRATCH/ELVIS
 
 PRINCIPLES="proximity similarity closure symmetry continuity"
 
