@@ -65,8 +65,12 @@ if __name__ == "__main__":
     else:
         device = "cpu"
 
-    # Construct the data path based on the principle argument
-    data_path = config.get_raw_patterns_path(True) / f"res_{args.img_size}_pin_False" / args.principle
+    # When ELVIS_DATA is set, data is structured as {principle}/test/ directly.
+    # The res_{img_size}_pin_False subdirectory only exists in the Docker/remote layout.
+    if os.getenv("ELVIS_DATA"):
+        data_path = config.get_raw_patterns_path() / args.principle
+    else:
+        data_path = config.get_raw_patterns_path(args.remote) / f"res_{args.img_size}_pin_False" / args.principle
 
     print(f"Starting model evaluations with data from {data_path}...")
     model = baseline_models[args.model]

@@ -22,7 +22,7 @@ RETRY_DELAY = 120  # HF rate limit resets every 5 minutes
 
 def download(output_dir: Path, principles: list[str]):
     output_dir.mkdir(parents=True, exist_ok=True)
-    patterns = [f"{p}/*" for p in principles] + ["README.md"]
+    patterns = [f"{p}/test/*" for p in principles]
 
     for attempt in range(1, MAX_RETRIES + 1):
         try:
