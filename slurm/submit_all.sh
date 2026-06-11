@@ -6,12 +6,12 @@
 mkdir -p logs
 
 SCRIPTS=(
-    slurm/eval_internvl_2b.sh
-    slurm/eval_internvl_8b.sh
-    slurm/eval_internvl_14b.sh
-    slurm/eval_internvl_38b.sh
-    slurm/eval_internvl_78b.sh
-    slurm/eval_llava_7b.sh
+    # slurm/eval_internvl_2b.sh    # done 2026-06-09
+    # slurm/eval_internvl_8b.sh    # done 2026-06-09
+    # slurm/eval_internvl_14b.sh   # done 2026-06-09
+    slurm/eval_internvl_38b.sh     # failed 2026-06-09 (CUDA init), fixed
+    slurm/eval_internvl_78b.sh     # pending
+    # slurm/eval_llava_7b.sh       # done 2026-06-09
 )
 
 for script in "${SCRIPTS[@]}"; do

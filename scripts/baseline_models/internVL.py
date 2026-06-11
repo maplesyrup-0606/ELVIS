@@ -224,7 +224,7 @@ def evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle):
     return accuracy, f1_score, precision, recall
 
 
-def load_intern_model_by_id(model_id, device):
+def load_intern_model_by_id(model_id):
     torch.backends.cuda.enable_flash_sdp(False)
     torch.backends.cuda.enable_mem_efficient_sdp(False)
     torch.backends.cuda.enable_math_sdp(True)
@@ -232,8 +232,9 @@ def load_intern_model_by_id(model_id, device):
         model_id,
         torch_dtype=torch.bfloat16,
         low_cpu_mem_usage=True,
-        trust_remote_code=True).eval().cuda()
-    return model.to(device)
+        device_map="auto",
+        trust_remote_code=True).eval()
+    return model
 
 
 def evaluate_llm_zeroshot(model, tokenizer, test_images, device, principle, mode):
@@ -252,7 +253,7 @@ def evaluate_llm_zeroshot(model, tokenizer, test_images, device, principle, mode
             question = conversations.internVL_zs_named_question(principle)
         else:
             question = conversations.internVL_zs_blind_question()
-        img = load_image(image).to(device=device, dtype=torch.bfloat16)
+        img = load_image(image).to(device=next(model.parameters()).device, dtype=torch.bfloat16)
         response = model.chat(tokenizer, img, question, generation_config)
         print(f"[zs_{mode}] {img_id} → {response}")
         resp_lower = response.lower()
@@ -358,65 +359,65 @@ def _run_internVL_zs(model, tokenizer, model_name, data_path, img_size, principl
 # ---------- 2B zero-shot ----------
 
 def run_internVL_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-2B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-2B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-2B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-2B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="named")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="named")
 
 
 def run_internVL_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-2B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-2B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-2B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-2B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="blind")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="blind")
 
 
 # ---------- 8B zero-shot ----------
 
 def run_internVL_8B_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-8B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-8B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-8B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-8B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="named")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="named")
 
 
 def run_internVL_8B_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-8B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-8B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-8B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-8B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="blind")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="blind")
 
 
 # ---------- 14B zero-shot ----------
 
 def run_internVL_14B_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-14B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-14B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-14B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-14B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="named")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="named")
 
 
 def run_internVL_14B_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-14B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-14B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-14B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-14B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="blind")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="blind")
 
 
-# ---------- 38B zero-shot (single H100 80GB) ----------
+# ---------- 38B zero-shot ----------
 
 def run_internVL_38B_zs_named(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-38B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-38B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-38B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-38B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="named")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="named")
 
 
 def run_internVL_38B_zs_blind(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    model = load_intern_model_by_id("OpenGVLab/InternVL3-38B", device)
+    model = load_intern_model_by_id("OpenGVLab/InternVL3-38B")
     tokenizer = AutoTokenizer.from_pretrained("OpenGVLab/InternVL3-38B", trust_remote_code=True, use_fast=False)
     return _run_internVL_zs(model, tokenizer, "InternVL3-38B", data_path, img_size, principle,
-                             batch_size, device, img_num, start_num, task_num, mode="blind")
+                             batch_size, "cuda", img_num, start_num, task_num, mode="blind")
 
 
 # ---------- 78B zero-shot (multi-GPU) ----------
