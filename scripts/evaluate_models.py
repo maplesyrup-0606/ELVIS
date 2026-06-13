@@ -24,6 +24,12 @@ baseline_models = {
     "internVL_X_no_principle": internVL.run_internVL_X_no_principle_given,
     "llava": llava.run_llava,
     "llava_no_principle": llava.run_llava_no_principle,
+    # --- baseline (few-shot with principle name) ---
+    "internVL_2B_baseline":  internVL.run_internVL_2B_baseline,
+    "internVL_8B_baseline":  internVL.run_internVL_8B_baseline,
+    "internVL_14B_baseline": internVL.run_internVL_14B_baseline,
+    "internVL_38B_baseline": internVL.run_internVL_38B_baseline,
+    "llava_baseline":        llava.run_llava_baseline,
     # --- zero-shot named (principle name given, no examples) ---
     "internVL_zs_named":     internVL.run_internVL_zs_named,
     "internVL_8B_zs_named":  internVL.run_internVL_8B_zs_named,

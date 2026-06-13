@@ -260,6 +260,71 @@ def run_llava(data_path, img_size, principle, batch_size, device, img_num, epoch
     return avg_accuracy, avg_f1
 
 
+def run_llava_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    from datetime import date
+    init_wandb(batch_size, principle)
+    model, processor = load_llava_model(device)
+    model_device = next(model.parameters()).device
+    principle_path = Path(data_path)
+    pattern_folders = sorted([p for p in (principle_path / "train").iterdir() if p.is_dir()],
+                              key=lambda x: x.stem)
+    if not pattern_folders:
+        print("No pattern folders found in", principle_path / "train")
+        return
+
+    if task_num != "full":
+        task_num = int(task_num)
+        pattern_folders = pattern_folders[start_num:start_num + task_num]
+
+    rtpt = RTPT(name_initials='JIS', experiment_name=f'Elvis-LLaVA-baseline-{principle}',
+                max_iterations=len(pattern_folders))
+    rtpt.start()
+
+    date_str = date.today().strftime("%Y%m%d")
+    output_dir = config.get_results_path(principle) / "baseline" / date_str
+    os.makedirs(output_dir, exist_ok=True)
+    filename = f"llava_baseline_{img_size}_{timestamp}_img_num_{img_num}.json"
+    tmp_path = output_dir / f"{filename}.tmp.json"
+    final_path = output_dir / filename
+
+    total_accuracy, total_f1, total_precision, total_recall = [], [], [], []
+    results = {}
+
+    for pattern_folder in pattern_folders:
+        rtpt.step()
+        print(f"Evaluating pattern: {pattern_folder.name}")
+        train_positive = load_images(pattern_folder / "positive", img_size, img_num)
+        train_negative = load_images(pattern_folder / "negative", img_size, img_num)
+        test_positive = load_images((principle_path / "test" / pattern_folder.name) / "positive", img_size, img_num)
+        test_negative = load_images((principle_path / "test" / pattern_folder.name) / "negative", img_size, img_num)
+
+        logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, model_device, principle)
+        test_images = [(img, 1) for img in test_positive] + [(img, 0) for img in test_negative]
+        accuracy, f1, precision, recall = evaluate_llm(model, processor, test_images, logic_rules, model_device, principle)
+
+        results[pattern_folder.name] = {
+            "accuracy": accuracy, "f1_score": f1,
+            "precision": precision, "recall": recall,
+            "logic_rules": logic_rules,
+        }
+        total_accuracy.append(accuracy)
+        total_f1.append(f1)
+        total_precision.append(precision)
+        total_recall.append(recall)
+
+        with open(tmp_path, "w") as f:
+            json.dump(results, f, indent=4)
+
+    avg_accuracy = sum(total_accuracy) / len(total_accuracy) if total_accuracy else 0
+    avg_f1 = sum(total_f1) / len(total_f1) if total_f1 else 0
+
+    os.replace(tmp_path, final_path)
+    print(f"Results saved to {final_path}")
+    print(f"Overall Avg Acc: {avg_accuracy:.2f}% | Avg F1: {avg_f1:.4f}")
+    wandb.finish()
+    return avg_accuracy, avg_f1
+
+
 def evaluate_llm_zeroshot(model, processor, test_images, device, principle, mode):
     """
     test_images: list of (PIL Image, label, image_id) triples
