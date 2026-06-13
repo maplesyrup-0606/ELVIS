@@ -5,7 +5,7 @@
 #SBATCH --time=24:00:00
 #SBATCH --mem=128G
 #SBATCH --cpus-per-task=6
-#SBATCH --gpus=h100:1
+#SBATCH --gpus=h100:2
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=mercurymcindoe@gmail.com
 
