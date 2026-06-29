@@ -7,6 +7,9 @@ from scripts.baseline_models import llama
 from scripts.baseline_models import llava
 from scripts.baseline_models import internVL
 from scripts.baseline_models import grm
+from scripts.baseline_models import qwen
+from scripts.baseline_models import deepseek
+from scripts.baseline_models import phi4
 import torch
 import os
 
@@ -30,6 +33,15 @@ baseline_models = {
     "internVL_14B_baseline": internVL.run_internVL_14B_baseline,
     "internVL_38B_baseline": internVL.run_internVL_38B_baseline,
     "llava_baseline":        llava.run_llava_baseline,
+    # --- Qwen2.5-VL ---
+    "qwen_3B_baseline":      qwen.run_qwen_3B_baseline,
+    "qwen_7B_baseline":      qwen.run_qwen_7B_baseline,
+    # --- DeepSeek-VL2 ---
+    "deepseek_tiny_baseline":  deepseek.run_deepseek_tiny_baseline,
+    "deepseek_small_baseline": deepseek.run_deepseek_small_baseline,
+    "deepseek_full_baseline":  deepseek.run_deepseek_full_baseline,
+    # --- Phi-4 multimodal ---
+    "phi4_baseline":           phi4.run_phi4_baseline,
     # --- zero-shot named (principle name given, no examples) ---
     "internVL_zs_named":     internVL.run_internVL_zs_named,
     "internVL_8B_zs_named":  internVL.run_internVL_8B_zs_named,

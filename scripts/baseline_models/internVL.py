@@ -193,18 +193,18 @@ def evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle):
     model.eval()
     correct, total = 0, 0
     all_labels, all_predictions = [], []
+    samples = []
     generation_config = dict(max_new_tokens=1024, do_sample=True)
     torch.cuda.empty_cache()
-    for image, label in test_images:
+    for image, label, img_id in test_images:
         question = conversations.internVL_eval_question(logic_rules)
         img = load_image(image).to(device=device, dtype=torch.bfloat16)
         response = model.chat(tokenizer, img, question, generation_config)
         print(f"Answer: {response}")
-        # print(f"Prediction : {prediction_label}\n\n")
         predicted_label = 1 if "positive" in response.lower() else 0
         all_labels.append(label)
         all_predictions.append(predicted_label)
-
+        samples.append({"id": img_id, "label": label, "predicted": predicted_label, "response": response})
         total += 1
         correct += (predicted_label == label)
 
@@ -212,7 +212,6 @@ def evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle):
 
     TN, FP, FN, TP = data_utils.confusion_matrix_elements(all_predictions, all_labels)
     precision, recall, f1_score = data_utils.calculate_metrics(TN, FP, FN, TP)
-    # f1 = f1_score(all_labels, all_predictions, average='macro') if total > 0 else 0
     wandb.log({f"{principle}/test_accuracy": accuracy,
                f"{principle}/f1_score": f1_score,
                f"{principle}/precision": precision,
@@ -221,7 +220,7 @@ def evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle):
     print(
         f"({principle}) Test Accuracy: {accuracy:.2f}% | F1 Score: {f1_score:.4f} | Precision: {precision:.4f} | Recall: {recall:.4f}")
 
-    return accuracy, f1_score, precision, recall
+    return accuracy, f1_score, precision, recall, samples
 
 
 def load_intern_model_by_id(model_id):
@@ -480,13 +479,17 @@ def _run_internVL_baseline(model_id, model_name, data_path, img_size, principle,
         test_negative = load_images((principle_path / "test" / pattern_folder.name) / "negative", img_size, img_num)
 
         logic_rules = infer_logic_rules(model, tokenizer, train_positive, train_negative, device, principle)
-        test_images = [(img, 1) for img in test_positive] + [(img, 0) for img in test_negative]
-        accuracy, f1, precision, recall = evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle)
+        test_images = (
+            [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
+            [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
+        )
+        accuracy, f1, precision, recall, samples = evaluate_llm(model, tokenizer, test_images, logic_rules, device, principle)
 
         results[pattern_folder.name] = {
             "accuracy": accuracy, "f1_score": f1,
             "precision": precision, "recall": recall,
             "logic_rules": logic_rules,
+            "samples": samples,
         }
         total_accuracy.append(accuracy)
         total_f1.append(f1)

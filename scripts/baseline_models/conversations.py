@@ -392,6 +392,25 @@ def llama_eval_conversation(positive_imgs, principle):
     return messages
 
 
+def phi4_stage1_prompt(principle, n_pos, n_neg):
+    image_tokens = "".join([f"<|image_{i+1}|>" for i in range(n_pos + n_neg)])
+    return (
+        f"You are an AI reasoning about visual patterns based on Gestalt principles.\n"
+        f"Principle: {principle}\n\n"
+        f"The first {n_pos} images are Positive examples, the next {n_neg} are Negative examples.\n"
+        f"{image_tokens}\n"
+        f"Please state the logic/rule that distinguishes Positive from Negative examples. "
+        f"Focus on the Gestalt principle of {principle}."
+    )
+
+
+def phi4_eval_prompt(logic_rules):
+    return (
+        f"<|image_1|>\nUsing the following reasoning rules: {logic_rules}. "
+        f"Classify this image as Positive or Negative. Only answer with positive or negative."
+    )
+
+
 def gpt_grp_prompts(principle, train_blocks, test_blocks):
     prompt = f"""
 You are given a few-shot grouping task.

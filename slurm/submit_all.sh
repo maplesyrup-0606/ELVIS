@@ -18,7 +18,7 @@ SCRIPTS=(
     slurm/eval_baseline_8b.sh
     slurm/eval_baseline_14b.sh
     slurm/eval_baseline_38b.sh
-    slurm/eval_baseline_llava.sh
+    # slurm/eval_baseline_llava.sh  # run separately if needed
 )
 
 for script in "${SCRIPTS[@]}"; do

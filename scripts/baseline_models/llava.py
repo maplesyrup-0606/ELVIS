@@ -92,8 +92,9 @@ def evaluate_llm(model, processor, test_images, logic_rules, device, principle):
     model.eval()
     correct, total = 0, 0
     all_labels, all_predictions = [], []
+    samples = []
     torch.cuda.empty_cache()
-    for image, label in test_images:
+    for image, label, img_id in test_images:
         conversation = conversations.llava_eval_conversation(image, logic_rules)
         inputs = processor.apply_chat_template(
             [conversation],
@@ -106,12 +107,12 @@ def evaluate_llm(model, processor, test_images, logic_rules, device, principle):
 
         generate_ids = model.generate(**inputs, max_new_tokens=1024)
         prediction = processor.decode(generate_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=False)
-        prediction_label = prediction.split(".assistant")[-1]
-        print(f"Prediction : {prediction_label}\n")
-        predicted_label = 1 if "positive" in prediction_label.lower() else 0
+        response = prediction.split(".assistant")[-1]
+        print(f"Prediction : {response}\n")
+        predicted_label = 1 if "positive" in response.lower() else 0
         all_labels.append(label)
         all_predictions.append(predicted_label)
-
+        samples.append({"id": img_id, "label": label, "predicted": predicted_label, "response": response})
         total += 1
         correct += (predicted_label == label)
 
@@ -119,8 +120,6 @@ def evaluate_llm(model, processor, test_images, logic_rules, device, principle):
 
     TN, FP, FN, TP = data_utils.confusion_matrix_elements(all_predictions, all_labels)
     precision, recall, f1_score = data_utils.calculate_metrics(TN, FP, FN, TP)
-    # f1 = f1_score(all_labels, all_predictions, average='macro') if total > 0 else 0
-
     wandb.log({f"{principle}/test_accuracy": accuracy,
                f"{principle}/f1_score": f1_score,
                f"{principle}/precision": precision,
@@ -129,7 +128,7 @@ def evaluate_llm(model, processor, test_images, logic_rules, device, principle):
     print(
         f"({principle}) Test Accuracy: {accuracy:.2f}% | F1 Score: {f1_score:.4f} | Precision: {precision:.4f} | Recall: {recall:.4f}")
 
-    return accuracy, f1_score, precision, recall
+    return accuracy, f1_score, precision, recall, samples
 
 def run_llava_no_principle(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
     init_wandb(batch_size, principle)
@@ -166,13 +165,15 @@ def run_llava_no_principle(data_path, img_size, principle, batch_size, device, i
         # print(type(train_positive[0]))
         logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, device, principle=None)
 
-        test_images = [(img, 1) for img in test_positive] + [(img, 0) for img in test_negative]
-        accuracy, f1, precision, recall = evaluate_llm(model, processor, test_images, logic_rules, device,
+        test_images = (
+            [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
+            [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
+        )
+        accuracy, f1, precision, recall, samples = evaluate_llm(model, processor, test_images, logic_rules, device,
                                                       principle=f"{principle}_no_principle")
 
         results[pattern_folder.name] = {"accuracy": accuracy, "f1_score": f1, "logic_rules": logic_rules,
-                                        "precision": precision,
-                                        "recall": recall
+                                        "precision": precision, "recall": recall, "samples": samples
                                         }
         total_accuracy.append(accuracy)
         total_f1.append(f1)
@@ -232,12 +233,14 @@ def run_llava(data_path, img_size, principle, batch_size, device, img_num, epoch
         # print(type(train_positive[0]))
         logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, device, principle)
 
-        test_images = [(img, 1) for img in test_positive] + [(img, 0) for img in test_negative]
-        accuracy, f1, precision, recall = evaluate_llm(model, processor, test_images, logic_rules, device, principle)
+        test_images = (
+            [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
+            [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
+        )
+        accuracy, f1, precision, recall, samples = evaluate_llm(model, processor, test_images, logic_rules, device, principle)
 
         results[pattern_folder.name] = {"accuracy": accuracy, "f1_score": f1, "logic_rules": logic_rules,
-                                        "precision": precision,
-                                        "recall": recall
+                                        "precision": precision, "recall": recall, "samples": samples
                                         }
         total_accuracy.append(accuracy)
         total_f1.append(f1)
@@ -299,13 +302,17 @@ def run_llava_baseline(data_path, img_size, principle, batch_size, device, img_n
         test_negative = load_images((principle_path / "test" / pattern_folder.name) / "negative", img_size, img_num)
 
         logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, model_device, principle)
-        test_images = [(img, 1) for img in test_positive] + [(img, 0) for img in test_negative]
-        accuracy, f1, precision, recall = evaluate_llm(model, processor, test_images, logic_rules, model_device, principle)
+        test_images = (
+            [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
+            [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
+        )
+        accuracy, f1, precision, recall, samples = evaluate_llm(model, processor, test_images, logic_rules, model_device, principle)
 
         results[pattern_folder.name] = {
             "accuracy": accuracy, "f1_score": f1,
             "precision": precision, "recall": recall,
             "logic_rules": logic_rules,
+            "samples": samples,
         }
         total_accuracy.append(accuracy)
         total_f1.append(f1)
