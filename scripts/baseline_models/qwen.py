@@ -6,7 +6,6 @@ from PIL import Image
 from tqdm import tqdm
 from datetime import datetime, date
 from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
-from qwen_vl_utils import process_vision_info
 
 from scripts import config
 from scripts.utils import data_utils, file_utils
@@ -28,6 +27,7 @@ def load_images(image_dir, img_size, num_samples=5):
 
 
 def _qwen_generate(model, processor, messages, max_new_tokens):
+    from qwen_vl_utils import process_vision_info
     text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     image_inputs, _ = process_vision_info(messages)
     inputs = processor(

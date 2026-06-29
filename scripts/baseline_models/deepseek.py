@@ -10,9 +10,6 @@ from PIL import Image
 from tqdm import tqdm
 from datetime import datetime, date
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from transformers import AutoModelForCausalLM
-from deepseek_vl2.models import DeepseekVLV2Processor, DeepseekVLV2ForCausalLM
-from deepseek_vl2.utils.io import load_pil_images
 
 from scripts import config
 from scripts.baseline_models import conversations
@@ -27,6 +24,7 @@ def init_wandb(batch_size):
 
 
 def load_deepseek_model(device):
+    from deepseek_vl2.models import DeepseekVLV2Processor, DeepseekVLV2ForCausalLM
     model_name = "deepseek-ai/deepseek-vl2-small"
     cache_dir = "/models/deepseek_cache"  # Ensure this is mounted in Docker
 
@@ -53,8 +51,7 @@ def load_images(image_dir, num_samples=5):
 
 
 def infer_logic_rules(model, processor, train_positive, train_negative, device, principle):
-    # Prepare conversation as per official example
-    # print("img path:" + str(train_negative[0]))
+    from deepseek_vl2.utils.io import load_pil_images
     conversation = conversations.deepseek_conversation(train_positive, train_negative, principle)
     pil_images = load_pil_images(conversation)
     prepare_inputs = processor(
@@ -131,7 +128,7 @@ def evaluate_deepseek(model, processor, test_images, logic_rules, device, princi
     torch.cuda.empty_cache()
 
     for image, label in test_images:
-
+        from deepseek_vl2.utils.io import load_pil_images
         conversation = conversations.deepseek_eval_conversation(image, logic_rules)
         pil_images = load_pil_images(conversation)
 
@@ -270,6 +267,7 @@ def run_deepseek(data_path, principle, batch_size, device, img_num, epochs):
 # ---------- new baseline runners with per-sample tracking ----------
 
 def load_deepseek_model_by_id(model_id):
+    from deepseek_vl2.models import DeepseekVLV2Processor
     processor = DeepseekVLV2Processor.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(
         model_id, trust_remote_code=True, torch_dtype=torch.bfloat16, device_map="auto"
