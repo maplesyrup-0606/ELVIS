@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 from tqdm import tqdm
 from datetime import datetime, date
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
+from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
 
 from scripts import config
 from scripts.utils import data_utils, file_utils
@@ -14,10 +14,13 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def load_qwen_model(model_id):
-    model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+    model = Qwen3VLForConditionalGeneration.from_pretrained(
         model_id, torch_dtype="auto", device_map="auto"
     ).eval()
-    processor = AutoProcessor.from_pretrained(model_id)
+    # cap visual tokens for 224px synthetic images — keeps VRAM low
+    processor = AutoProcessor.from_pretrained(
+        model_id, min_pixels=224 * 224, max_pixels=224 * 224
+    )
     return model, processor
 
 
@@ -27,11 +30,12 @@ def load_images(image_dir, img_size, num_samples=5):
 
 
 def _qwen_generate(model, processor, messages, max_new_tokens):
-    from qwen_vl_utils import process_vision_info
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    image_inputs, _ = process_vision_info(messages)
-    inputs = processor(
-        text=[text], images=image_inputs, padding=True, return_tensors="pt"
+    inputs = processor.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        tokenize=True,
+        return_dict=True,
+        return_tensors="pt",
     ).to(model.device)
     generated_ids = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
     trimmed = [out[len(inp):] for inp, out in zip(inputs.input_ids, generated_ids)]
@@ -144,11 +148,21 @@ def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
     return avg_accuracy, avg_f1
 
 
-def run_qwen_3B_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    return _run_qwen_baseline("Qwen/Qwen2.5-VL-3B-Instruct", "Qwen2.5-VL-3B",
+def run_qwen3_2B_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    return _run_qwen_baseline("Qwen/Qwen3-VL-2B-Instruct", "Qwen3-VL-2B",
                                data_path, img_size, principle, batch_size, img_num, start_num, task_num)
 
 
-def run_qwen_7B_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
-    return _run_qwen_baseline("Qwen/Qwen2.5-VL-7B-Instruct", "Qwen2.5-VL-7B",
+def run_qwen3_4B_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    return _run_qwen_baseline("Qwen/Qwen3-VL-4B-Instruct", "Qwen3-VL-4B",
+                               data_path, img_size, principle, batch_size, img_num, start_num, task_num)
+
+
+def run_qwen3_8B_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    return _run_qwen_baseline("Qwen/Qwen3-VL-8B-Instruct", "Qwen3-VL-8B",
+                               data_path, img_size, principle, batch_size, img_num, start_num, task_num)
+
+
+def run_qwen3_32B_baseline(data_path, img_size, principle, batch_size, device, img_num, epochs, start_num, task_num):
+    return _run_qwen_baseline("Qwen/Qwen3-VL-32B-Instruct", "Qwen3-VL-32B",
                                data_path, img_size, principle, batch_size, img_num, start_num, task_num)

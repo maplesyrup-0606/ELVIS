@@ -33,9 +33,11 @@ baseline_models = {
     "internVL_14B_baseline": internVL.run_internVL_14B_baseline,
     "internVL_38B_baseline": internVL.run_internVL_38B_baseline,
     "llava_baseline":        llava.run_llava_baseline,
-    # --- Qwen2.5-VL ---
-    "qwen_3B_baseline":      qwen.run_qwen_3B_baseline,
-    "qwen_7B_baseline":      qwen.run_qwen_7B_baseline,
+    # --- Qwen3-VL ---
+    "qwen3_2B_baseline":     qwen.run_qwen3_2B_baseline,
+    "qwen3_4B_baseline":     qwen.run_qwen3_4B_baseline,
+    "qwen3_8B_baseline":     qwen.run_qwen3_8B_baseline,
+    "qwen3_32B_baseline":    qwen.run_qwen3_32B_baseline,
     # --- DeepSeek-VL2 ---
     "deepseek_tiny_baseline":  deepseek.run_deepseek_tiny_baseline,
     "deepseek_small_baseline": deepseek.run_deepseek_small_baseline,

@@ -14,11 +14,16 @@ SCRIPTS=(
     # slurm/eval_internvl_78b.sh   # skipped
     # slurm/eval_llava_7b.sh       # done 2026-06-09
     # --- baseline ---
-    slurm/eval_baseline_2b.sh
-    slurm/eval_baseline_8b.sh
-    slurm/eval_baseline_14b.sh
-    slurm/eval_baseline_38b.sh
-    # slurm/eval_baseline_llava.sh  # run separately if needed
+    # --- InternVL3 baseline (done 2026-06-29) ---
+    # slurm/eval_baseline_2b.sh
+    # slurm/eval_baseline_8b.sh
+    # slurm/eval_baseline_14b.sh
+    # slurm/eval_baseline_38b.sh
+    # --- Qwen3-VL baseline ---
+    slurm/eval_baseline_qwen3_2b.sh
+    slurm/eval_baseline_qwen3_4b.sh
+    slurm/eval_baseline_qwen3_8b.sh
+    slurm/eval_baseline_qwen3_32b.sh
 )
 
 for script in "${SCRIPTS[@]}"; do
