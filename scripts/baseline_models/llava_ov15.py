@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image
 from tqdm import tqdm
 from datetime import datetime, date
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import AutoProcessor, AutoModelForCausalLM, AutoConfig
 
 from scripts import config
 from scripts.utils import data_utils, file_utils
@@ -14,8 +14,14 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def load_llava_ov15_model(model_id):
+    # Workaround: model's custom code expects text_config.pad_token_id,
+    # which is missing on newer transformers. Patch it before load.
+    config = AutoConfig.from_pretrained(model_id, trust_remote_code=True)
+    if getattr(config.text_config, "pad_token_id", None) is None:
+        config.text_config.pad_token_id = getattr(config.text_config, "eos_token_id", None) or 0
     model = AutoModelForCausalLM.from_pretrained(
-        model_id, torch_dtype="auto", device_map="auto", trust_remote_code=True
+        model_id, config=config, torch_dtype="auto",
+        device_map="auto", trust_remote_code=True,
     ).eval()
     processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
     return model, processor
