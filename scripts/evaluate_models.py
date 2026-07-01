@@ -10,6 +10,7 @@ from scripts.baseline_models import grm
 from scripts.baseline_models import qwen
 from scripts.baseline_models import deepseek
 from scripts.baseline_models import phi4
+from scripts.baseline_models import llava_ov15
 import torch
 import os
 
@@ -44,6 +45,9 @@ baseline_models = {
     "deepseek_full_baseline":  deepseek.run_deepseek_full_baseline,
     # --- Phi-4 multimodal ---
     "phi4_baseline":           phi4.run_phi4_baseline,
+    # --- LLaVA-OneVision-1.5 ---
+    "llava_ov15_4B_baseline":  llava_ov15.run_llava_ov15_4B_baseline,
+    "llava_ov15_8B_baseline":  llava_ov15.run_llava_ov15_8B_baseline,
     # --- zero-shot named (principle name given, no examples) ---
     "internVL_zs_named":     internVL.run_internVL_zs_named,
     "internVL_8B_zs_named":  internVL.run_internVL_8B_zs_named,
