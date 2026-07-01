@@ -20,8 +20,8 @@ SCRIPTS=(
     # slurm/eval_baseline_14b.sh
     # slurm/eval_baseline_38b.sh
     # --- Qwen3-VL baseline ---
-    slurm/eval_baseline_qwen3_2b.sh
-    slurm/eval_baseline_qwen3_4b.sh
+    # slurm/eval_baseline_qwen3_2b.sh   # done 2026-06-30
+    # slurm/eval_baseline_qwen3_4b.sh   # done 2026-06-30
     slurm/eval_baseline_qwen3_8b.sh
     slurm/eval_baseline_qwen3_32b.sh
 )
