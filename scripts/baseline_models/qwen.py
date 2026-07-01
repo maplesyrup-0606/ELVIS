@@ -57,7 +57,7 @@ def infer_logic_rules(model, processor, train_positive, train_negative, principl
         f"Focus on the Gestalt principle of {principle}."
     )})
     messages = [{"role": "user", "content": content}]
-    return _qwen_generate(model, processor, messages, max_new_tokens=1024)
+    return _qwen_generate(model, processor, messages, max_new_tokens=128)
 
 
 def evaluate_llm(model, processor, test_images, logic_rules, principle):

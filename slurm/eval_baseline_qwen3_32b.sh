@@ -2,7 +2,7 @@
 #SBATCH --job-name=elvis-baseline-qwen3-32b
 #SBATCH --output=logs/%x-%j.out
 #SBATCH --error=logs/%x-%j.err
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --mem=80G
 #SBATCH --cpus-per-task=8
 #SBATCH --gpus-per-node=h100:1
