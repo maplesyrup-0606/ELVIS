@@ -22,8 +22,8 @@ SCRIPTS=(
     # --- Qwen3-VL baseline ---
     # slurm/eval_baseline_qwen3_2b.sh   # done 2026-06-30
     # slurm/eval_baseline_qwen3_4b.sh   # done 2026-06-30
-    slurm/eval_baseline_qwen3_8b.sh
-    slurm/eval_baseline_qwen3_32b.sh
+    #slurm/eval_baseline_qwen3_8b.sh
+    #slurm/eval_baseline_qwen3_32b.sh
     # --- LLaVA-OneVision-1.5 baseline ---
     slurm/eval_baseline_llava_ov15_4b.sh
     slurm/eval_baseline_llava_ov15_8b.sh

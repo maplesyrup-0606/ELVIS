@@ -1,0 +1,1307 @@
+{
+    "000_0_non_overlap_red_triangle_rel_shape_2_s_irrel_color_all": {
+        "accuracy": 100.0,
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **groups of similar shapes (triangles) that are close together**, forming distinct clusters, while **Negative examples** either **mix different shapes** within a group or **break the uniformity of grouping** by including dissimilar shapes (e.g., hexagons, squares, diamonds) in close proximity to triangles, thereby violating the principle of proximity as a cohesive, uniform group.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n- **Image 1:** Two small gray triangles grouped together in the bottom-left, and two more in the top-right. Each group is tightly clustered, and all shapes are identical (triangles). The eye naturally groups them by proximity and similarity.\n- **Image 2:** Two clusters of three golden triangles each \u2014 one in the top-right, one in the bottom-left. Again, same shape, close together, forming clear groups.\n- **Image 3:** Two clusters of three green triangles \u2014 top-right and bottom-left. Same pattern: uniform shape, close proximity, clear grouping.\n\n\u2705 In all positive cases, **only triangles** are present, and they are grouped by **proximity** into distinct clusters. The principle of proximity is cleanly applied: **objects close together are perceived as a group**.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n- **Image 4:** Top cluster has two purple triangles and one purple hexagon. Bottom cluster has one purple hexagon and one purple square. The grouping is disrupted by **mixed shapes**. Even though they are close, the presence of non-triangles breaks the uniformity, making the grouping less coherent.\n- **Image 5:** Top cluster has two cyan triangles and one cyan hexagon. Bottom cluster has two cyan triangles. The top group is mixed, violating the principle of similarity within proximity.\n- **Image 6:** Top cluster has two light yellow hexagons. Bottom cluster has one light yellow triangle and one light yellow diamond. Again, mixed shapes within close proximity \u2014 the grouping is ambiguous or broken.\n\n\u274c In all negative cases, **at least one group contains a mix of shapes** (triangles + hexagons/squares/diamonds), which **interferes with the perception of a unified group** based on proximity alone. The Gestalt principle of proximity is **weakened** because similarity is not maintained.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if all shapes are triangles and are grouped by proximity into distinct clusters. It is a Negative example if any group contains a mix of different shapes (non-triangles) in close proximity, disrupting the uniformity required for clear grouping by proximity.**\n\nThis reflects the **combined influence of proximity and similarity** \u2014 both are necessary for strong perceptual grouping under Gestalt principles.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "001_1_non_overlap_red_triangle_rel_shape_2_s_irrel_color_exist": {
+        "accuracy": 83.33333333333333,
+        "f1_score": 0.8,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **groups of shapes that are close together**, forming distinct clusters, while **Negative examples** show **shapes that are spaced far apart**, failing to form cohesive groups.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1, 3, 5):**\n- **Image 1 (Blue shapes):** Three triangles grouped together at the top, and three shapes (two diamonds, one star) grouped together at the bottom. The close proximity within each group creates two distinct clusters.\n- **Image 3 (Red triangles):** Two small clusters \u2014 one with two triangles at the top-left, and another with three triangles at the bottom-center. The shapes within each cluster are close, forming perceptual groups.\n- **Image 5 (Blue shapes):** Two distinct clusters \u2014 two plus signs at the top-left, and a square with a circle at the bottom-right. Again, proximity within each group is strong.\n\n\u2705 In all positive examples, **shapes are arranged in close-knit clusters**, and the **distance between clusters is greater than the distance within clusters**, leading to clear perceptual grouping.\n\n---\n\n#### **Negative Examples (Images 2, 4, 6):**\n- **Image 2 (Yellow shapes):** Two small clusters \u2014 one with two triangles at the top-right, and one with two triangles at the bottom-left. However, the **clusters are very far apart**, and **each cluster is minimal** (only two shapes). The overall arrangement lacks a strong sense of grouping due to **excessive spacing**.\n- **Image 4 (Pink shapes):** Two clusters \u2014 one with a triangle, square, and plus sign at the top-right, and another with a square and circle at the bottom-left. But the **distance between clusters is large**, and the **shapes within clusters are not tightly grouped** (e.g., the top-right shapes are spread out).\n- **Image 6 (Light blue shapes):** Two clusters \u2014 two plus signs at the top-left, and a square with a circle at the bottom-right. Again, **the clusters are far apart**, and the **bottom cluster is sparse**.\n\n\u274c In all negative examples, **the shapes are too far apart**, either between clusters or within clusters, **failing to create strong perceptual groups** as per the principle of proximity.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **strong proximity within clusters** and **clear separation between clusters**, leading to distinct perceptual groups.  \n> **Negative examples** exhibit **weak proximity** \u2014 either **shapes are too scattered within clusters** or **clusters are too far apart** \u2014 resulting in **no clear grouping**.\n\nThis aligns with the **Gestalt principle of proximity**: **elements that are close together are perceived as a group**, while those spaced apart are perceived as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "002_2_non_overlap_red_triangle_rel_shape_2_m_irrel_color_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear grouping by proximity** \u2014 objects that are close together are perceived as a unified group, while objects that are farther apart are perceived as separate groups. In each positive image, the shapes are arranged in **two distinct clusters**, with **clear spatial separation** between the clusters, making the grouping visually obvious.\n\n> **Negative examples** **violate or weaken** the principle of proximity \u2014 either by **lacking clear grouping** (e.g., scattered elements), **introducing different shapes** that disrupt uniformity, or **failing to form distinct clusters** that are clearly separated.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (1\u20133):\n\n- **Image 1**: Two clusters of 3 light triangles each, clearly separated in space. Proximity within each cluster is strong; distance between clusters is large \u2192 clear grouping.\n- **Image 2**: Two clusters of 3 pink triangles each, similarly spaced apart \u2192 strong proximity within clusters, clear separation between them.\n- **Image 3**: Two clusters of 3 dark blue triangles each, arranged similarly \u2192 consistent with proximity principle.\n\n\u2192 In all three, **same shape, same size, grouped by proximity into two distinct clusters**.\n\n---\n\n#### \u274c Negative Examples (4\u20136):\n\n- **Image 4**: Left side has **a square and two circles** (different shapes), right side has **three triangles**. The left group is **heterogeneous**, breaking the uniformity needed for strong perceptual grouping. Proximity is present, but **shape dissimilarity weakens the grouping**.\n- **Image 5**: Left side has **two crosses and a circle** (different shapes), right side has **three green triangles**. Again, **mixed shapes** on the left disrupt the grouping, making it less coherent.\n- **Image 6**: Four purple triangles, **scattered** across the canvas with **no clear clustering**. The proximity between any two is **not strong enough** to form distinct groups \u2014 they appear as **individual elements**, not grouped.\n\n\u2192 In all three, **either the shapes are mixed** (breaking similarity) or **the elements are too spread out** (breaking proximity), so the principle of grouping by proximity is **not effectively applied**.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements are arranged into two distinct, clearly separated clusters, with each cluster consisting of identical shapes (e.g., all triangles), and the proximity within each cluster is strong relative to the distance between clusters. Negative examples either have mixed shapes within a cluster or lack clear clustering due to excessive spacing.**\n\nThis rule directly reflects the **Gestalt principle of proximity**: elements that are close together are perceived as a group, but this grouping is strengthened when the elements are also similar in shape and size.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "003_3_non_overlap_red_triangle_rel_shape_2_m_irrel_color_exist": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.6666666666666666,
+        "precision": 0.6666666666666666,
+        "recall": 0.6666666666666666,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear grouping of similar shapes** that are **close together**, forming **distinct clusters** that are visually perceived as separate units.  \n> **Negative examples** show **scattered or loosely arranged shapes**, where **proximity is not strong enough** to create clear perceptual groups, or the shapes are too spread out or varied to form cohesive clusters.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1**: Two distinct clusters of white triangles \u2014 one group of 3 on the left, another of 3 on the right. The close proximity within each group makes them appear as separate units.\n- **Image 2**: Two distinct clusters of red triangles \u2014 one group of 3 on the left, another of 3 on the top right. Again, proximity within groups creates clear visual separation.\n- **Image 3**: Two distinct clusters \u2014 one group of 3 white shapes (triangle, plus, square) on the left, and another group of 3 white triangles on the top right. Even though the shapes in the left group are different, their close proximity causes them to be grouped together.\n\n\u2192 In all positive cases, **shapes are arranged in tight, distinct clusters**, and **the distance between clusters is greater than the distance within clusters**, leading to clear perceptual grouping via **proximity**.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4**: Shapes are **scattered** \u2014 a red star and heart on the left, a red diamond, square, and hexagon on the right. The shapes are **not close enough** to form cohesive groups. The different shapes also break uniformity, weakening grouping.\n- **Image 5**: Gray triangles are **widely dispersed** across the canvas. No two are close enough to form a cluster. The lack of proximity prevents any grouping.\n- **Image 6**: Orange triangles are **spread out** in a loose, irregular pattern. While there are 7 triangles, they do not form tight clusters \u2014 the distances between them are too large, so no clear grouping occurs.\n\n\u2192 In all negative cases, **shapes are too far apart** or **randomly distributed**, so **proximity does not create perceptual groups**. The visual field appears as a collection of isolated elements, not organized units.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the shapes are arranged in one or more tight clusters where the distance between shapes within a cluster is significantly smaller than the distance between clusters. This strong proximity leads to clear perceptual grouping.  \n> The image is a Negative example if the shapes are scattered or loosely arranged, with no clear clusters formed due to insufficient proximity.**\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close to each other are perceived as a group**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "004_4_non_overlap_red_triangle_rel_shape_2_l_irrel_color_all": {
+        "accuracy": 83.33333333333333,
+        "f1_score": 0.8571428571428571,
+        "precision": 0.75,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear grouping of similar shapes into distinct clusters** that are **spatially close to each other**, while **Negative examples** show **scattered or loosely arranged elements** that **do not form coherent, close-knit groups**.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n- **Image 1 (gray triangles):** Two distinct clusters \u2014 one in the top-left, one in the bottom-right. Within each cluster, triangles are close together, forming clear groups.\n- **Image 2 (teal triangles):** Two clusters \u2014 one in the top-right, one in the bottom-left. Again, triangles within each group are close, and the groups are separated.\n- **Image 3 (green triangles):** Two clusters \u2014 one in the top-left, one in the bottom-right. Same pattern: tight grouping within clusters, clear separation between clusters.\n\n\u2705 In all three, **proximity creates strong perceptual grouping** \u2014 we naturally see two separate groups because the elements within each group are close, and the groups are far apart.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n- **Image 4 (orange symbols):** Elements are **mixed** (plus signs, circles, diamonds) and **not grouped by similarity or proximity**. The symbols are scattered, and no clear cluster forms. Even though some are close, the **lack of uniform shape and loose arrangement** breaks the grouping.\n- **Image 5 (yellow shapes):** A mix of circles and triangles, scattered across the canvas. The shapes are **not grouped by proximity** \u2014 they are too spread out and mixed, so no clear clusters form.\n- **Image 6 (blue triangles):** Although all shapes are the same (triangles), they are **widely dispersed** across the canvas. There is **no tight clustering** \u2014 the elements are too far apart to be perceived as groups. Proximity is **not sufficient** to create grouping.\n\n\u274c In all three, **proximity does not lead to clear perceptual grouping** \u2014 either because elements are too scattered, mixed, or not close enough to form distinct clusters.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements are arranged into two or more distinct, tightly grouped clusters based on proximity, with clear separation between clusters. It is a Negative example if the elements are scattered, mixed, or too loosely arranged to form coherent groups, even if some are close.**\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close together are perceived as a group**. The Positive examples satisfy this; the Negative examples do not.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "005_5_non_overlap_red_triangle_rel_shape_2_l_irrel_color_exist": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear grouping of shapes due to close spatial proximity**, where shapes are clustered together in distinct groups, making it easy to perceive them as separate units.  \n> **Negative examples** show **shapes scattered or spaced apart**, with **no clear grouping** based on proximity \u2014 the elements appear as a single, diffuse set rather than distinct clusters.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1 (Red shapes):** Two distinct clusters \u2014 one with 5 shapes (heart, star, circle, diamond, star) grouped closely on the left, and another with 6 triangles grouped closely on the right. The separation between clusters is clear.\n- **Image 2 (Green shapes):** Two distinct clusters \u2014 one with 5 shapes (circle, star, cross, circle, star) on the top right, and another with 6 triangles on the bottom left. Again, clear separation.\n- **Image 3 (White shapes):** Two distinct clusters \u2014 one with 4 triangles on the top left, and another with 5 shapes (circle, diamond, heart, circle, square) on the bottom right. The clusters are well-separated.\n\n\u2705 In all three, **proximity creates perceptual grouping** \u2014 we naturally see two separate groups.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4 (Green shapes):** Shapes are scattered across the canvas \u2014 no two clusters are clearly defined. The shapes are too dispersed to form distinct groups by proximity.\n- **Image 5 (Red shapes):** Shapes are arranged in a loose, irregular pattern \u2014 some are close, but no clear, tight clusters. The overall arrangement lacks distinct groupings.\n- **Image 6 (White triangles):** All shapes are **identical** (triangles) and **evenly spaced** across the canvas \u2014 no clustering at all. Proximity does not create any perceptual grouping.\n\n\u274c In all three, **proximity does not lead to grouping** \u2014 the elements appear as a single, unstructured set.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the shapes are arranged into two or more distinct, tightly clustered groups based on proximity. It is a Negative example if the shapes are scattered or evenly distributed, with no clear grouping by proximity.**\n\nThis directly reflects the **Gestalt principle of proximity**: elements that are close together are perceived as a group, while those spaced apart are perceived as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "006_6_non_overlap_red_triangle_rel_shape_2_xl_irrel_color_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear, distinct clusters of similar shapes** that are **close together**, forming **two or more separate groups** that are **visually grouped** due to their proximity. The elements within each group are **near each other**, while the groups themselves are **spaced apart**, making the grouping obvious.\n\n> **Negative examples** either **lack clear grouping** (elements are scattered or too dispersed) or **show mixed shapes within a cluster**, which **violates the principle of similarity** and **weakens the effect of proximity**. In some cases, the elements are too spread out to form coherent groups, or the grouping is ambiguous due to mixed shapes or irregular spacing.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1**: Two distinct clusters of **white triangles**, each group tightly packed, with clear space between them. Proximity creates two separate groups.\n- **Image 2**: Two distinct clusters of **orange triangles**, similarly grouped by proximity. The spacing between clusters is clear.\n- **Image 3**: Two distinct clusters of **white triangles**, again with clear separation and internal closeness. The grouping is unambiguous.\n\n\u2192 In all three, **proximity is strong within groups** and **weak between groups**, leading to clear perceptual grouping.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4**: A **mixed set of shapes** (circles, crosses, diamonds, stars, triangles) in **two loose clusters**. While there is some proximity, the **lack of shape similarity** within clusters **weakens the grouping**. The principle of **similarity** is violated, making the grouping less effective.\n- **Image 5**: Two clusters, but the **lower cluster contains mixed shapes** (triangles, stars, squares), which **confuses the grouping**. Proximity is present, but **similarity is not**, so the grouping is ambiguous.\n- **Image 6**: **Single, scattered group** of purple triangles with **no clear sub-clusters**. The elements are **too dispersed** to form distinct groups. Proximity is **insufficient** to create perceptual grouping.\n\n\u2192 In all three, **proximity alone is not enough** to create strong, clear perceptual groups due to **lack of similarity** or **insufficient closeness**.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements form two or more distinct, tightly grouped clusters of the same shape, with clear spacing between clusters \u2014 demonstrating strong grouping by proximity.**\n>\n> **The image is a Negative example if the elements are scattered, mixed in shape, or lack sufficient closeness to form clear, separate groups \u2014 weakening or breaking the principle of proximity.**\n\nThis rule aligns with the Gestalt principle of **proximity**, which states that **objects close to each other are perceived as a group**, but this effect is **enhanced by similarity** and **diminished by dispersion or heterogeneity**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "007_7_non_overlap_red_triangle_rel_shape_2_xl_irrel_color_exist": {
+        "accuracy": 100.0,
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **two or more distinct clusters of shapes**, where shapes within each cluster are **close together** (high proximity), and the clusters themselves are **separated by noticeable space** (low proximity between clusters). This creates a clear perception of **separate groups**.\n\n> **Negative examples** show **shapes scattered randomly** or **forming a single, loosely connected group**, with **no clear separation** between clusters. The proximity between shapes is inconsistent \u2014 some are close, others are far \u2014 leading to a perception of **one unified group** or **no distinct grouping**.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (1\u20133):\n\n- **Image 1**: Two distinct clusters \u2014 one with mixed shapes (circles, squares, stars, crosses) on the left, and one with only triangles on the right. Clear spatial separation.\n- **Image 2**: Two vertical clusters \u2014 top cluster of green triangles, bottom cluster of mixed green shapes. Separated by empty space.\n- **Image 3**: Two clusters \u2014 left cluster of teal triangles, right cluster of mixed teal shapes. Again, clear separation.\n\n\u2192 In all three, **proximity within clusters is high**, **proximity between clusters is low** \u2192 **perceived as separate groups**.\n\n#### \u274c Negative Examples (4\u20136):\n\n- **Image 4**: Two clusters of light blue shapes, but they are **very close together** \u2014 almost touching \u2014 and the shapes are **similar** (mostly circles, crosses, squares). The lack of clear separation makes them appear as **one large group**.\n- **Image 5**: Many purple triangles scattered **widely across the canvas** with **no clear grouping**. Proximity is **low everywhere**, so no distinct clusters form.\n- **Image 6**: Two clusters of green shapes, but they are **very close vertically**, and the shapes are **mixed and similar**. The proximity between clusters is **too high** to perceive them as separate.\n\n\u2192 In all three, **proximity is either too low (no grouping)** or **too high between clusters (no separation)** \u2192 **fails to create distinct perceptual groups**.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if it contains two or more clearly separated clusters of shapes, where shapes within each cluster are close together (high internal proximity) and clusters are spaced apart (low inter-cluster proximity). Negative examples lack this clear separation \u2014 either shapes are too scattered or clusters are too close to be perceived as distinct.**\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close together are perceived as a group**. The positive examples exploit this principle to create distinct groups; the negative examples do not.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "008_8_non_overlap_red_triangle_rel_shape_3_s_irrel_color_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show groups of triangles that are **visually clustered together** in close proximity, forming distinct perceptual groups. The triangles within each cluster are **close to each other**, while the clusters themselves are **spaced apart**, leading the viewer to perceive them as separate groups.\n\n> **Negative examples** either **lack clear grouping** (triangles are scattered with no close neighbors) or **include non-triangular shapes** (like circles or a plus sign), which **breaks the uniformity** and disrupts the perception of cohesive groups based on proximity.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1 (Red triangles):** Three distinct clusters \u2014 top, middle, bottom \u2014 each with 2 or 3 triangles close together. Clear grouping by proximity.\n- **Image 2 (Light yellow triangles):** Three clusters \u2014 top, right, bottom-left \u2014 each with 2 triangles close together. Again, proximity creates groups.\n- **Image 3 (Green triangles):** Three clusters \u2014 left, center, bottom-right \u2014 each with 2 or 3 triangles grouped closely. Proximity is the dominant organizing principle.\n\n\u2192 In all three, **triangles are grouped by proximity**, and the viewer naturally perceives them as separate clusters.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4 (Purple triangles):** Triangles are **widely scattered** across the canvas with **no clear clusters**. No two triangles are close enough to form a group. Proximity does **not** create perceptual groups.\n- **Image 5 (Yellow shapes):** Contains **triangles and circles**. The shapes are mixed and scattered. Even if some are close, the **lack of uniform shape** and **scattered arrangement** prevent clear grouping by proximity.\n- **Image 6 (Olive green shapes):** Includes **triangles, a circle, and a plus sign**. The presence of **non-triangular shapes** breaks the uniformity. The triangles are not grouped closely \u2014 one pair is near the bottom, another near the top, but they are not perceived as a cohesive group due to the **interruption by other shapes** and **lack of proximity**.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the triangles are arranged in distinct, close-knit clusters (grouped by proximity) and no non-triangular shapes are present. It is a Negative example if the triangles are scattered without clear proximity-based grouping, or if non-triangular shapes are included, disrupting the uniformity and grouping.**\n\nThis aligns with the **Gestalt principle of proximity**: elements that are close together are perceived as a group, while those farther apart are seen as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "009_9_non_overlap_red_triangle_rel_shape_3_s_irrel_color_exist": {
+        "accuracy": 83.33333333333333,
+        "f1_score": 0.8571428571428571,
+        "precision": 0.75,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **groups of similar shapes that are close together**, forming clear perceptual groups due to their spatial proximity.  \n> **Negative examples** show **shapes that are either too scattered, dissimilar, or lack clear grouping**, violating the principle of proximity.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1**: Three purple triangles grouped closely in the top-left, and two more grouped in the top-right. The close spacing within each group makes them perceptually distinct as separate clusters.\n- **Image 2**: Three light gray triangles grouped in the top-right, and two in the bottom-left. Again, proximity creates clear groupings.\n- **Image 3**: Multiple cyan shapes \u2014 triangles, circles, and a diamond \u2014 but **each group is tightly clustered** (e.g., two triangles and a circle in the top-left, three triangles in the bottom-right). Even with different shapes, **proximity overrides shape differences** to form groups.\n\n\u2192 In all positive cases, **objects are arranged in tight clusters**, making grouping intuitive and automatic.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4**: Pink shapes (circles, stars, plus signs) are **widely scattered**. No two shapes are close enough to form a perceptual group. The principle of proximity is not satisfied.\n- **Image 5**: Gray shapes (stars, circles, squares, diamonds, crosses) are **spread out and mixed**, with no clear clusters. The variety of shapes and lack of proximity prevent grouping.\n- **Image 6**: Green triangles are **sparsely distributed** across the canvas. Although they are all the same shape, their **lack of proximity** prevents them from being perceived as a group \u2014 they appear as isolated elements.\n\n\u2192 In all negative cases, **shapes are too far apart** to be perceived as grouped, even if they are similar in shape or color.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the shapes are arranged in tight clusters (high proximity), forming clear perceptual groups. It is a Negative example if the shapes are scattered or spaced too far apart, failing to form coherent groups despite similarity.**\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close together are perceived as a group**, regardless of their shape or color, while objects that are far apart are perceived as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "010_10_non_overlap_red_triangle_rel_shape_3_m_irrel_color_all": {
+        "accuracy": 100.0,
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear, distinct clusters of triangles** where individual triangles are **close together**, forming **perceptually grouped units**. The spacing *within* each cluster is small, while the spacing *between* clusters is relatively large, leading to a clear perception of separate groups.\n\n> **Negative examples** show triangles that are **scattered or loosely arranged**, with **no clear grouping** due to **inconsistent or large spacing** between elements. Even if some triangles are near each other, the overall arrangement lacks strong perceptual grouping \u2014 either because the clusters are too sparse, too isolated, or because the spacing between elements is not sufficiently differentiated to create distinct groups.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (1\u20133):\n\n- **Image 1**: Three distinct clusters \u2014 top-center, bottom-left, bottom-right. Each cluster has 2\u20134 triangles tightly grouped. Clear separation between clusters.\n- **Image 2**: Three clusters \u2014 top-left, top-right, bottom-center. Each cluster has 2\u20133 triangles close together. Spacing between clusters is large.\n- **Image 3**: Three clusters \u2014 top-left, top-right, bottom-left. Triangles within each cluster are close; clusters are well-separated.\n\n\u2192 In all three, **proximity creates strong perceptual grouping** \u2014 we see 3 groups, not 9\u201310 individual triangles.\n\n#### \u274c Negative Examples (4\u20136):\n\n- **Image 4**: Triangles are **widely scattered**. While some are near each other, the overall arrangement lacks tight clusters. The green color doesn\u2019t help grouping \u2014 it\u2019s just a color change, not a grouping cue. No clear clusters form.\n- **Image 5**: Triangles are **very sparse**, with only a few pairs barely close. Most are isolated. The spacing is too uniform and large to form distinct groups.\n- **Image 6**: Triangles are arranged in **loose, ambiguous clusters**. The top-right group has 3 triangles, but one is slightly offset. The bottom-right group has 4, but they\u2019re spread out. The top-left group is only 2. The overall spacing is inconsistent, and the clusters are not clearly separated \u2014 leading to **weak or no perceptual grouping**.\n\n\u2192 In all three, **proximity does not create strong perceptual groups** \u2014 the elements appear as a random scattering.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **strong grouping via proximity**: triangles are arranged in **tight, well-separated clusters**, making it easy to perceive distinct groups.  \n> **Negative examples** lack such clear grouping: triangles are **scattered, loosely arranged, or spaced too uniformly**, so **proximity does not lead to perceptual grouping**.\n\nThis directly reflects the **Gestalt principle of proximity**: elements that are close together are perceived as a group, while those farther apart are seen as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "011_11_non_overlap_red_triangle_rel_shape_3_m_irrel_color_exist": {
+        "accuracy": 83.33333333333333,
+        "f1_score": 0.8,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear grouping of shapes by proximity** \u2014 shapes that are close together are perceived as a group, while those farther apart are seen as separate. The groupings are **visually distinct and coherent**, with minimal overlap or ambiguity in grouping.\n\n> **Negative examples** show **less clear or inconsistent grouping by proximity** \u2014 either shapes are too scattered, or there are **multiple small clusters that don\u2019t form a single coherent group**, or the proximity is not strong enough to override other factors (like shape or color), leading to **ambiguous or fragmented perception**.\n\n---\n\n### Detailed Analysis:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1 (Gray shapes):**  \n  - Three distinct clusters:  \n    - Bottom-left: star, spade, hexagon (close together)  \n    - Center: diamond, club, hexagon (close together)  \n    - Top-right: three triangles (close together)  \n  \u2192 Clear, separate groups formed by proximity.\n\n- **Image 2 (Brown shapes):**  \n  - Top: star, cross, square (close together)  \n  - Right: two clusters of triangles (each cluster has 3\u20134 triangles close together)  \n  \u2192 Strong grouping by proximity; each cluster is visually distinct.\n\n- **Image 3 (Light blue triangles):**  \n  - Three distinct clusters of triangles:  \n    - Top-left: 3 triangles  \n    - Middle-right: 3 triangles  \n    - Bottom-left: 3 triangles  \n  \u2192 All groups are formed by proximity; no overlapping or ambiguous groupings.\n\n\u2705 In all positive examples, **proximity creates clear, stable, and unambiguous groupings**.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4 (Green shapes):**  \n  - Shapes are scattered:  \n    - Top-right: square, hexagon, spade (close)  \n    - Bottom-right: triangle, spade, hexagon (close)  \n    - Left: circle, cross, hexagon (close)  \n  \u2192 Although there are clusters, the **overall layout is more spread out**, and the **groupings are less cohesive**. The proximity is present but **not strong enough to create a unified perceptual structure**.\n\n- **Image 5 (Orange shapes):**  \n  - Top: star, cross, circle (close)  \n  - Middle: star, diamond, heart (close)  \n  - Bottom: heart, square, spade, hexagon (close)  \n  \u2192 Multiple small clusters, but **no dominant or clear grouping**. The **spacing between clusters is similar to within-cluster spacing**, weakening the perception of distinct groups.\n\n- **Image 6 (Yellow triangles):**  \n  - Many isolated triangles scattered across the canvas.  \n  \u2192 **No clear clusters** \u2014 proximity is **too weak** to form any group. Each triangle is perceived as **separate**.\n\n\u274c In all negative examples, **proximity fails to create strong, coherent groupings** \u2014 either due to **scattering**, **ambiguous spacing**, or **lack of clustering**.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **strong, clear, and unambiguous grouping by proximity** \u2014 shapes are arranged in distinct, tightly clustered groups that are clearly separated from other groups.  \n> **Negative examples** exhibit **weak, ambiguous, or fragmented grouping by proximity** \u2014 either shapes are too scattered, or the spacing between shapes within and between clusters is inconsistent, leading to a lack of coherent perceptual grouping.\n\nThis aligns with the **Gestalt principle of proximity**: **elements that are close together are perceived as a group** \u2014 and in the positive cases, this principle is clearly applied and effective; in the negative cases, it is not.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "012_12_non_overlap_red_triangle_rel_shape_3_l_irrel_color_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show groups of triangles that are **clearly clustered together** in distinct, tight groupings, such that the proximity of the elements within each group is strong enough to be perceived as separate units or clusters. The spacing *between* clusters is significantly greater than the spacing *within* clusters, leading to a clear perception of multiple distinct groups.\n\n> **Negative examples** either show **no clear grouping** (elements are scattered with no tight clusters), or **ambiguous grouping** (elements are too sparsely distributed or arranged in a way that does not form coherent clusters), or **include non-triangular shapes** that disrupt the uniformity and intended grouping.\n\n---\n\n### Detailed Analysis:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1 (Orange triangles):** Three distinct clusters \u2014 top-left, top-right, bottom-right. Within each cluster, triangles are close together; between clusters, there is noticeable space. Clear perception of 3 groups.\n\n- **Image 2 (Teal triangles):** Three distinct clusters \u2014 top-left, center, right. Again, tight groupings with clear separation. Proximity within groups is strong.\n\n- **Image 3 (Dark red triangles):** Three clusters \u2014 top-left, top-right, bottom-center. Same pattern: close within, far between. Strong grouping via proximity.\n\n\u2705 All three follow the principle: **elements close together are perceived as a group**.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4 (White triangles):** Triangles are arranged in a **loose, scattered, circular pattern**. There is no tight clustering \u2014 the proximity is too uniform across the whole set. The arrangement suggests a single, diffuse group or no group at all. **No clear separation into distinct clusters**.\n\n- **Image 5 (Teal triangles + other shapes):** While there are two clusters of triangles, the presence of **non-triangular shapes (circle, square, cross, heart)** in the center disrupts the uniformity. The principle of proximity is applied to similar elements \u2014 here, the different shapes interfere with the perception of a coherent group of triangles. Also, the central cluster is mixed, breaking the homogeneity needed for clean grouping.\n\n- **Image 6 (Light blue triangles):** Triangles are **widely scattered** with no tight clusters. The spacing between any two triangles is roughly equal, so **no groupings are perceptible**. This violates proximity \u2014 elements are not close enough to form groups.\n\n\u274c All three fail to show clear, distinct groupings based on proximity.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the triangles are arranged in 2 or more distinct, tight clusters where the proximity within each cluster is significantly greater than the proximity between clusters. The image is a Negative example if the triangles are scattered without clear clusters, or if non-triangular shapes interfere with the grouping.**\n\nThis rule directly reflects the **Gestalt principle of proximity**: **objects that are close together are perceived as a group**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "013_13_non_overlap_red_triangle_rel_shape_3_l_irrel_color_exist": {
+        "accuracy": 50.0,
+        "f1_score": 0.4,
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear, distinct groups of similar shapes (triangles) that are closely clustered together**, such that the human eye naturally perceives them as separate units or groups due to their close spatial proximity. The elements within each group are close to each other, while the groups themselves are spaced apart.\n\n> **Negative examples** either **lack clear grouping** (elements are scattered without forming cohesive clusters) or **include dissimilar shapes** (like circles, stars, or spades) that disrupt the uniformity and break the perception of a single group based on proximity alone.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1 (Red triangles):** Two distinct clusters of red triangles \u2014 one at the top, one at the bottom \u2014 each internally close together. The spacing between clusters is large, so we perceive two separate groups.\n- **Image 2 (Light yellow shapes):** Two clusters of light yellow triangles \u2014 one on the left, one on the right \u2014 again, internally close, externally spaced. (Note: even though there are other shapes like circles and stars at the bottom, they are not part of the triangle clusters, and the triangles themselves are grouped by proximity.)\n- **Image 3 (Blue triangles):** Three distinct clusters of blue triangles \u2014 top-left, center-right, bottom-right \u2014 each group internally close, externally separated. Clear grouping by proximity.\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4 (Dark blue triangles):** Triangles are **scattered randomly** across the canvas with **no clear clusters**. No groupings are formed by proximity \u2014 elements are too far apart to be perceived as groups.\n- **Image 5 (Purple triangles):** Triangles are **sparsely distributed** and **not clustered**. While some are close, the overall arrangement lacks distinct, cohesive groups. Proximity is not strong enough to form perceptual units.\n- **Image 6 (Red symbols):** Contains **mixed shapes** (spades, crosses, circles) that **break the uniformity**. Even though some are close, the **lack of similarity** (a key Gestalt principle) interferes with grouping by proximity. The eye does not perceive them as a single group of triangles or even as coherent clusters.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements (primarily triangles) are arranged in distinct, internally close clusters, separated from other clusters by sufficient space \u2014 demonstrating strong grouping by proximity.**\n>\n> **The image is a Negative example if the elements are scattered without forming clear clusters, or if dissimilar shapes disrupt the perception of grouping based on proximity alone.**\n\nThis aligns with the Gestalt principle of **proximity**: elements that are close together are perceived as a group, while those farther apart are seen as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "014_14_non_overlap_red_triangle_rel_shape_3_xl_irrel_color_all": {
+        "accuracy": 83.33333333333333,
+        "f1_score": 0.8571428571428571,
+        "precision": 0.75,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show elements (triangles) grouped into **clear, distinct clusters** where the shapes are **close together**, forming perceptually unified groups. The spacing *within* each cluster is small, while the spacing *between* clusters is relatively large, leading the viewer to perceive separate groups.\n\n> **Negative examples** either **lack clear grouping** (as in Image 4, where triangles are scattered with no tight clusters) or **introduce different shapes** (as in Image 5, which includes circles, stars, and squares) that **break the uniformity** and disrupt the perception of cohesive groups based solely on proximity.\n\n---\n\n### Detailed Breakdown:\n\n**Positive Examples (Images 1\u20133):**\n\n- **Image 1 (purple triangles):** Three distinct clusters of triangles. Each cluster is tightly packed, and the gaps between clusters are large. This creates a strong perception of three separate groups.\n- **Image 2 (beige triangles):** Three clusters, similarly spaced and tightly grouped. The uniform shape and spacing reinforce grouping by proximity.\n- **Image 3 (pink triangles):** Three clusters, again with tight internal spacing and clear separation between clusters. The visual system naturally groups them.\n\n\u2192 In all three, **proximity is the dominant organizing principle** \u2014 similar shapes are grouped by their closeness.\n\n---\n\n**Negative Examples (Images 4\u20136):**\n\n- **Image 4 (blue shapes):** While there are two clusters, they contain **mixed shapes** (triangles, circles, stars, squares). The principle of **similarity** is violated, so proximity alone is not sufficient to create a strong perceptual group. The mixed elements make the grouping ambiguous or less coherent.\n- **Image 5 (white shapes):** Contains **two clusters of triangles** and **one cluster of mixed shapes** (circles, diamonds, stars). The mixed cluster breaks the uniformity, making the grouping less consistent with pure proximity. Also, the top-right cluster is less dense.\n- **Image 6 (dark blue triangles):** Triangles are **scattered randomly** with **no clear clusters**. The spacing between individual triangles is inconsistent, and there are no tight groupings. Proximity does not lead to perceptual grouping \u2014 the elements appear as a random field.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements are arranged in distinct, tight clusters where proximity clearly defines separate groups, and all elements within a group are of the same shape (uniformity supports grouping). It is a Negative example if the elements are scattered without clear clusters, or if different shapes are mixed within clusters, disrupting the perceptual grouping based on proximity alone.**\n\nThis aligns with the Gestalt principle of **proximity**, which states that elements that are close together are perceived as a group \u2014 but this effect is strongest when combined with **similarity** (same shape, color, etc.).",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "015_15_non_overlap_red_triangle_rel_shape_3_xl_irrel_color_exist": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show elements grouped into **distinct clusters** where shapes are **close together**, creating a clear perception of separate groups.  \n> **Negative examples** show elements that are **scattered or evenly distributed**, with **no clear grouping** due to lack of proximity.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1**: Multiple green triangles are grouped into two tight clusters on the left, and a small group of circles and crosses on the right. The close proximity within each group makes them appear as separate units.\n- **Image 2**: Three distinct clusters of red triangles, each tightly packed. The spacing between clusters is greater than within clusters, so proximity clearly defines the groups.\n- **Image 3**: Three separate clusters \u2014 one with green shapes (circles, crosses, squares), and two with green triangles. Each cluster is compact, and the distance between clusters is large, reinforcing grouping by proximity.\n\n\u2705 In all positive examples, **proximity creates clear, distinct visual groups**.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4**: Gray shapes (stars, circles, diamonds, crosses, triangles) are scattered across the canvas with **no consistent clustering**. Elements are spaced irregularly, so proximity does not form clear groups.\n- **Image 5**: White triangles are **evenly and sparsely distributed** across the space. There is **no clustering** \u2014 each triangle is isolated, so proximity does not apply.\n- **Image 6**: Pale yellow triangles are **scattered randomly** with no tight groupings. The spacing is inconsistent, but no clusters form due to lack of close proximity.\n\n\u274c In all negative examples, **elements lack close proximity**, so **no distinct groups are perceived**.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements are arranged in distinct, tight clusters where proximity creates clear visual groupings. It is a Negative example if the elements are scattered or evenly distributed, with no such grouping due to insufficient proximity.**\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close to each other are perceived as a group**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "016_16_non_overlap_red_triangle_rel_shape_4_s_irrel_color_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show groups of triangles that are **visually clustered together** in close proximity, forming distinct perceptual groups. The triangles within each cluster are close to one another, while the clusters themselves are spaced apart, leading the viewer to perceive them as separate groups.\n\n> **Negative examples** either **lack clear grouping** (triangles are scattered with no close neighbors) or **include non-triangular shapes** (stars, diamonds, crosses) that disrupt the uniformity and break the perception of cohesive groups formed by proximity.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n- **Image 1 (orange triangles):** Three distinct clusters \u2014 top-center (2), left (2), right (2). Each cluster has triangles close together.\n- **Image 2 (blue triangles):** Four clusters \u2014 top-right (2), bottom-left (2), bottom-center (2), and right-center (2). All triangles are grouped by proximity.\n- **Image 3 (green triangles):** Three clusters \u2014 top-center (3), bottom-left (2), bottom-right (2). Again, triangles are grouped by closeness.\n\n\u2192 In all three, **triangles are arranged in tight clusters**, and the **principle of proximity** strongly applies \u2014 we naturally group elements that are near each other.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n- **Image 4 (white shapes):** Contains **stars, diamonds, and crosses** \u2014 not all triangles. The triangles (bottom) are grouped, but the presence of other shapes breaks the uniformity. Also, the top-left stars are isolated, and the top-right shapes are scattered. **Proximity is not consistently applied across all elements.**\n- **Image 5 (gray triangles):** Triangles are **widely scattered** with **no clear clusters**. Each triangle is isolated or too far from others to form a group. **Proximity does not lead to grouping.**\n- **Image 6 (white shapes):** Contains **triangles and non-triangles (diamonds, crosses)**. The triangles are grouped in clusters (top-left, top-right, bottom-left), but the bottom-right cluster includes non-triangles, disrupting the uniform grouping. Also, the non-triangular shapes are not grouped with triangles, breaking the cohesion.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if all shapes are triangles and they are arranged in distinct, tight clusters based on proximity \u2014 forming clear perceptual groups.**\n>\n> **The image is a Negative example if either:**\n> - **Not all shapes are triangles** (introducing stars, diamonds, crosses, etc.), OR\n> - **Triangles are scattered without forming clear clusters** (no proximity-based grouping).\n\nThis rule directly reflects the **Gestalt principle of proximity**: elements that are close together are perceived as a group. In the positive cases, this principle is clearly applied; in the negative cases, it is either violated by lack of grouping or by the presence of non-conforming elements.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "017_17_non_overlap_red_triangle_rel_shape_4_s_irrel_color_exist": {
+        "accuracy": 100.0,
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear groupings of shapes that are close together**, forming distinct clusters, while **Negative examples** show **shapes that are more evenly or randomly spaced**, with **no strong perceptual grouping** due to lack of proximity.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1**: Multiple cyan triangles are grouped into **three distinct clusters** (top-left, top-right, bottom-right), and a separate small group of a square and circle in the bottom-left. The close proximity within each cluster makes them visually grouped.\n- **Image 2**: Dark green triangles are arranged in **four distinct clusters** (top-right, left, center, bottom-right). The spacing between clusters is greater than within clusters, so proximity creates clear groupings.\n- **Image 3**: Dark teal triangles are grouped into **four clusters** (top-right, center-left, bottom-left, bottom-right). Again, shapes within each cluster are close, while clusters are separated \u2014 promoting perceptual grouping.\n\n\u2705 In all positive examples, **proximity creates strong visual groupings** \u2014 the eye naturally perceives clusters.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4**: White triangles are **scattered across the canvas** with **no clear clusters**. The spacing is relatively uniform, so **no strong grouping** is perceived.\n- **Image 5**: Blue shapes (circles, stars, diamonds, crosses) are **sparsely and irregularly distributed**. Even though some are close, the overall layout lacks consistent proximity-based grouping.\n- **Image 6**: Yellow triangles are **widely spaced** and **evenly distributed** across the canvas. There is **no clear clustering** \u2014 the eye does not group them into distinct units.\n\n\u274c In all negative examples, **lack of proximity prevents perceptual grouping** \u2014 shapes appear as individual elements rather than clusters.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the shapes are arranged in distinct clusters where elements within each cluster are close together (high proximity), while clusters are separated (low proximity between clusters). Negative examples lack such clear clustering \u2014 shapes are either evenly spaced or randomly distributed, resulting in no strong perceptual grouping based on proximity.**\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close to each other are perceived as a group**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "018_18_non_overlap_red_triangle_rel_shape_4_m_irrel_color_all": {
+        "accuracy": 33.333333333333336,
+        "f1_score": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear, distinct clusters** of triangles where elements are **close together**, forming **perceptual groups**. The spacing within each cluster is small compared to the spacing between clusters, leading the viewer to naturally group them.\n\n> **Negative examples** show **scattered or loosely arranged** triangles where the **proximity between elements is inconsistent or too large**, preventing clear grouping. In some cases, elements are spread out uniformly or arranged in a pattern (like a circle) that does not create distinct clusters.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1 (pink triangles):** Four distinct clusters \u2014 top-right, top-left, bottom-left, bottom-right. Each cluster has 3\u20134 triangles close together, with clear gaps between clusters.\n- **Image 2 (blue triangles):** Four clusters \u2014 top-right, top-left, bottom-right, bottom-center. Again, tight groupings with noticeable separation.\n- **Image 3 (orange triangles):** Five clusters \u2014 top-left, top-center, center, bottom-right, bottom-center. All clusters are compact and well-separated.\n\n\u2705 In all three, **proximity creates strong perceptual grouping** \u2014 we see \u201cgroups\u201d of triangles, not just individual triangles.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4 (cream triangles):** Most triangles are **isolated or loosely grouped**, with **one cluster of 3** and **several single triangles**. Also, there are **non-triangle shapes** (circle, star) that break the pattern and disrupt grouping. The overall arrangement lacks tight clusters.\n- **Image 5 (green triangles):** Triangles are **widely scattered** with **no clear clusters**. The spacing between triangles is relatively uniform, so **proximity does not lead to grouping** \u2014 we perceive individual elements, not groups.\n- **Image 6 (cream triangles):** Triangles are arranged in a **circular pattern**, with **equal spacing** between them. This creates a **uniform distribution**, not clusters. Proximity is **not sufficient** to form groups \u2014 instead, the arrangement suggests a **contour or shape**, not grouping by proximity.\n\n\u274c In all three, **proximity does not lead to clear perceptual grouping** \u2014 the elements are either too spread out, uniformly spaced, or disrupted by other shapes.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **strong grouping by proximity**: triangles are arranged in **tight, distinct clusters** with **clear gaps** between clusters.  \n> **Negative examples** lack such grouping: triangles are **scattered, uniformly spaced, or arranged in patterns** that **do not form perceptual clusters** based on proximity.\n\nThis aligns with the Gestalt principle of **proximity**, which states that **objects close to each other are perceived as a group**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "019_19_non_overlap_red_triangle_rel_shape_4_m_irrel_color_exist": {
+        "accuracy": 83.33333333333333,
+        "f1_score": 0.8,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show groups of **similar shapes** (all triangles) that are **clustered closely together**, forming distinct perceptual groups due to their **proximity**.  \n> **Negative examples** either show **mixed shapes** (triangles, squares, crosses, circles) or **scattered elements** with **no clear grouping** by proximity, breaking the principle.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1, 2, 3):\n\n- **Image 1**: All green triangles are grouped into 4 distinct clusters. Within each cluster, triangles are close together, making them perceptually grouped.\n- **Image 2**: All white shapes are triangles, grouped into 3 clusters. Even though one cluster has a cross and a circle, the overall grouping is still by proximity of triangles \u2014 but wait, actually, this image has mixed shapes. Let\u2019s re-examine.\n\nWait \u2014 **Image 2** contains **triangles, crosses, and circles**. That seems inconsistent with the \"positive\" label if the rule is strict proximity of *same shape*. But perhaps the rule is not about shape similarity, but about **grouping by proximity regardless of shape**? Let\u2019s check the negative examples.\n\n#### \u274c Negative Examples (Images 4, 5, 6):\n\n- **Image 4**: Mixed shapes (squares, crosses, circles, triangles) scattered with no clear grouping. Proximity doesn\u2019t form coherent groups \u2014 elements are too spread out or mixed.\n- **Image 5**: All triangles, but **widely scattered** \u2014 no clusters. Proximity is not sufficient to form groups.\n- **Image 6**: All triangles, but **evenly distributed** across the space \u2014 no close groupings. Proximity is minimal.\n\n---\n\n### Re-evaluating:\n\nActually, **Image 2** (positive) has mixed shapes, but they are grouped by proximity \u2014 e.g., the top-right cluster has a triangle, cross, and circle \u2014 but they are close together. So perhaps the rule is:\n\n> **Positive examples** show **clear perceptual grouping by proximity**, regardless of shape \u2014 meaning elements are **clustered closely**, forming distinct groups.  \n> **Negative examples** show **either no clustering** (scattered elements) or **mixed elements that don\u2019t form coherent groups** due to lack of proximity or inconsistent grouping.\n\nBut **Image 3** (positive) has triangles, a square, and a diamond \u2014 again, mixed shapes \u2014 but they are grouped in clusters.\n\nSo the real rule is:\n\n> **The positive examples exhibit strong grouping by proximity \u2014 elements are arranged in tight clusters, making them perceptually grouped.**  \n> **The negative examples lack such clustering \u2014 elements are either too scattered or mixed without forming coherent groups.**\n\n---\n\n### Final Rule:\n\n> **Positive examples** demonstrate the **Gestalt principle of proximity** by having elements arranged in **clear, tight clusters**, leading to perceptual grouping.  \n> **Negative examples** fail to show this \u2014 either because elements are **widely scattered** (Image 5, 6) or **mixed without forming coherent clusters** (Image 4).\n\nThus, the key distinction is **whether the elements form distinct, close-knit groups** \u2014 which is the essence of the **proximity principle**.\n\n---\n\n\u2705 **Answer**:  \nThe positive examples show elements grouped into tight clusters by proximity, creating distinct perceptual groups. The negative examples lack such clustering \u2014 elements are either scattered or mixed without forming coherent groups, violating the principle of proximity.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "020_20_non_overlap_red_triangle_rel_shape_4_l_irrel_color_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.7499999999999999,
+        "precision": 0.6,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show triangles grouped into **clear, distinct clusters** where individual triangles are **close together**, forming perceptually unified groups. The spacing *within* each cluster is small, while the spacing *between* clusters is relatively large, making the groupings obvious to the eye.\n\n> **Negative examples** show triangles that are **more evenly scattered** or **less tightly grouped**, with **no clear clusters**. The spacing between triangles is more uniform, so the principle of proximity does not strongly apply \u2014 the eye does not naturally group them into distinct units.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n- **Image 1 (orange):** Four distinct clusters of triangles. Each cluster has 4\u20135 triangles packed closely together, with noticeable gaps between clusters.\n- **Image 2 (white):** Three clusters, each with 4\u20135 triangles in tight proximity. The clusters are well-separated.\n- **Image 3 (purple):** Four clusters, each with 4\u20135 triangles grouped tightly. Again, clear separation between groups.\n\n\u2192 In all three, **proximity creates strong perceptual grouping** \u2014 the eye sees \u201cgroups\u201d rather than individual triangles.\n\n#### **Negative Examples (Images 4\u20136):**\n- **Image 4 (cream):** Triangles are **widely dispersed** with no tight clusters. Some are close, but no consistent grouping. The overall distribution is **uniform and random**.\n- **Image 5 (green):** While there is a denser central area, the triangles are **not clearly clustered** \u2014 many are isolated or loosely connected. The grouping is **ambiguous**.\n- **Image 6 (white):** Triangles are **scattered** with no tight groupings. The distribution is **even**, and no cluster stands out.\n\n\u2192 In all three, **proximity does not lead to clear perceptual grouping** \u2014 the eye sees a field of individual triangles, not distinct groups.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the triangles are arranged in distinct, tightly grouped clusters (high proximity within clusters, low proximity between clusters), leading to clear perceptual grouping. It is a Negative example if the triangles are scattered or loosely distributed, with no strong clusters, so proximity does not induce grouping.**\n\nThis directly reflects the **Gestalt principle of proximity**: elements that are close together are perceived as a group.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "021_21_non_overlap_red_triangle_rel_shape_4_l_irrel_color_exist": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.6666666666666666,
+        "precision": 0.6666666666666666,
+        "recall": 0.6666666666666666,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear, distinct clusters of shapes** where elements are **close together**, forming **perceived groups** due to proximity.  \n> **Negative examples** show **scattered or loosely distributed shapes** with **no strong grouping** by proximity \u2014 elements are either too far apart or arranged in a way that does not create clear visual clusters.\n\n---\n\n### Detailed Analysis:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1 (Blue shapes):** Multiple different shapes (squares, circles, triangles, stars, diamonds, crosses) are grouped into **several tight clusters** in the upper-left and upper-right. The close proximity of shapes within each cluster makes them appear as distinct groups, even though the shapes differ.\n\n- **Image 2 (Dark gray triangles):** All shapes are **identical triangles**, but they are arranged in **four distinct, tight clusters**. The proximity within each cluster creates a strong perception of grouping.\n\n- **Image 3 (Light gray triangles):** Similar to Image 2, but with **lighter triangles**. Again, **multiple tight clusters** are formed by proximity, even though the shapes are identical and scattered across the canvas.\n\n\u2705 In all three, **proximity creates clear visual groupings** \u2014 the principle is strongly applied.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4 (Yellow shapes):** Shapes are arranged in **loose, circular patterns** or **sparse groupings**. While there are some nearby elements, the overall distribution is **too spread out** to form strong perceptual clusters. The gaps between groups are large, weakening the grouping effect.\n\n- **Image 5 (Light yellow triangles):** Triangles are **widely scattered** across the canvas with **no tight clusters**. The spacing is **uniform and sparse**, so proximity does not create any strong grouping \u2014 the shapes appear as individual elements.\n\n- **Image 6 (Olive green shapes):** Although there are **some small clusters**, the overall arrangement is **irregular and fragmented**. The shapes are **mixed and scattered**, with **no consistent, tight grouping**. The proximity is **inconsistent** \u2014 some shapes are close, others are far, leading to **no clear perceptual organization**.\n\n\u274c In all three, **proximity does not create strong, coherent groups** \u2014 the principle is not effectively applied.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **strong grouping via proximity** \u2014 shapes are arranged in **clear, tight clusters** that are visually distinct from each other.  \n> **Negative examples** lack such grouping \u2014 shapes are **scattered, sparse, or loosely arranged**, so **proximity does not lead to perceptual organization**.\n\nThis aligns directly with the **Gestalt principle of proximity**: elements that are close together are perceived as a group, while those that are far apart are perceived as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "022_22_non_overlap_red_triangle_rel_shape_4_xl_irrel_color_all": {
+        "accuracy": 50.0,
+        "f1_score": 0.5714285714285715,
+        "precision": 0.5,
+        "recall": 0.6666666666666666,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show elements (triangles) grouped into **clear, distinct clusters** where individual shapes are **close together**, forming perceptually unified groups. The human eye naturally perceives these as separate units due to their spatial closeness, even if the shapes are identical.\n\n> **Negative examples** show elements that are **scattered or loosely distributed** across the space, with **no clear grouping** based on proximity. The shapes appear as a single, diffuse field rather than distinct clusters, violating the principle of proximity.\n\n---\n\n### Detailed Breakdown:\n\n**Positive Examples (Images 1\u20133):**\n\n- **Image 1 (orange triangles):** Four distinct clusters of triangles, each tightly grouped. The gaps between clusters are larger than the gaps within clusters \u2192 strong perception of separate groups.\n- **Image 2 (blue triangles):** Three distinct clusters, each with triangles close together. The arrangement forms a diagonal pattern, but each group is internally cohesive.\n- **Image 3 (purple triangles):** Three clusters, each with triangles grouped closely. The clusters are separated by noticeable space.\n\n\u2192 In all three, **proximity creates distinct perceptual groups**.\n\n---\n\n**Negative Examples (Images 4\u20136):**\n\n- **Image 4 (red triangles):** Triangles are **widely scattered** with no clear clusters. The spacing is relatively uniform, so no group stands out. Proximity does not form any strong perceptual units.\n- **Image 5 (purple shapes):** A mix of shapes (triangles, squares, stars, etc.) scattered with no clear grouping. Even though some shapes are close, the variety and randomness prevent strong grouping by proximity.\n- **Image 6 (white triangles):** Triangles are **evenly dispersed** across the canvas, forming a sparse, uniform pattern. No clusters are perceptible.\n\n\u2192 In all three, **lack of proximity prevents grouping**, and the elements are perceived as a single, unstructured set.\n\n---\n\n### Final Rule:\n\n> **The images are classified as Positive if the elements are arranged in distinct, tightly grouped clusters where proximity creates clear perceptual units. They are Negative if the elements are scattered or uniformly distributed, lacking any strong grouping by proximity.**\n\nThis directly reflects the **Gestalt principle of proximity**: objects that are close together are perceived as a group, while those spaced apart are seen as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            }
+        ]
+    },
+    "023_23_non_overlap_red_triangle_rel_shape_4_xl_irrel_color_exist": {
+        "accuracy": 100.0,
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show elements (triangles) grouped into **clear, distinct clusters** where elements within each cluster are **close together**, and **clusters are separated by noticeable gaps**. This creates a strong perception of separate groups due to proximity.\n\n> **Negative examples** either **lack clear grouping** (elements are scattered randomly) or **mix different shapes** (e.g., circles, squares, crosses, stars) within clusters, which **breaks the uniformity** and **weakens the perception of cohesive groups** based solely on proximity.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1**: Four distinct clusters of **identical pink triangles**, each cluster tightly grouped, with clear space between clusters. Strong proximity effect.\n- **Image 2**: Three clusters of **identical pink triangles**, again with tight grouping and spacing. Proximity clearly defines groups.\n- **Image 3**: Three clusters of **identical green triangles**, same pattern \u2014 tight grouping, clear separation. Proximity is the dominant organizing principle.\n\n\u2192 In all three, **similarity (same shape/color)** and **proximity (closeness)** work together to form clear, separate groups.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4**: Scattered **white triangles** with **no clear clusters** \u2014 elements are too far apart and randomly distributed. **Proximity is not effective** in forming groups.\n- **Image 5**: Four clusters, but each contains **mixed shapes** (circles, squares, crosses, stars) \u2014 even though they are close, the **lack of similarity** weakens the grouping effect. Proximity alone is insufficient.\n- **Image 6**: Similar to Image 5 \u2014 clusters contain **mixed shapes** (blue circles, squares, crosses, stars), so the grouping is **ambiguous**. Proximity is present, but **not sufficient** to override the visual noise from dissimilar elements.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the elements are grouped into distinct clusters based primarily on proximity, and all elements within a cluster are identical in shape and color.**  \n> **It is a Negative example if elements are either too scattered (no proximity) or if clusters contain mixed shapes (proximity is overridden by lack of similarity).**\n\nThis reflects the Gestalt principle of **proximity**, which states that **objects close to each other are perceived as a group**, **but this effect is strongest when the objects are also similar**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "024_24_non_overlap_red_triangle_rel_shape_2_s_irrel_size_all": {
+        "accuracy": 66.66666666666667,
+        "f1_score": 0.5,
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **groups of shapes that are close together**, forming perceptual units or clusters, while **Negative examples** show **shapes that are spaced apart**, failing to form clear perceptual groups.\n\n---\n\n### Detailed Breakdown:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1**: Two green and brown triangles are grouped closely at the top; two yellow and purple triangles are grouped closely at the bottom. The close proximity creates two distinct clusters.\n- **Image 2**: Two orange and red triangles are grouped at the bottom; two tan and green triangles are grouped at the top. Again, proximity creates two clear groups.\n- **Image 3**: Three shapes (purple, dark blue, light green) are grouped on the left; three shapes (white, pink, light blue) are grouped on the right. Proximity forms two distinct clusters.\n\n\u2705 In all positive cases, **shapes are arranged in close proximity to form perceptual groups**, which aligns with the Gestalt principle of proximity \u2014 objects near each other are perceived as a group.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4**: Shapes are scattered \u2014 a green clover, orange triangle, gray hexagon, white square, and purple triangle \u2014 with no two shapes close enough to form a group. The arrangement is random and dispersed.\n- **Image 5**: A teal hexagon and white star are near each other at the top, but a green triangle and pink triangle are far below \u2014 the top pair is close, but the bottom pair is isolated and not grouped with the top. The overall configuration lacks consistent grouping.\n- **Image 6**: A white hexagon and blue square are together on the left; a green and dark green triangle are together on the right. However, the two groups are **far apart** from each other, and the overall composition does not form a single coherent perceptual structure. The principle of proximity is **not strongly applied** across the image.\n\n\u26a0\ufe0f In negative examples, **shapes are either too scattered or grouped in a way that doesn\u2019t create a unified perceptual organization**. Even if some pairs are close, the overall layout lacks the clear, cohesive grouping that defines the positive examples.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **clear, close groupings of shapes** that are perceived as distinct units due to **proximity**.  \n> **Negative examples** lack such groupings \u2014 shapes are **scattered or too far apart**, failing to form perceptual clusters.\n\nThis directly reflects the **Gestalt principle of proximity**: **objects that are close together are perceived as belonging together**.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "025_25_non_overlap_red_triangle_rel_shape_2_s_irrel_size_exist": {
+        "accuracy": 50.0,
+        "f1_score": 0,
+        "precision": 0,
+        "recall": 0.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **groups of shapes that are close together**, forming perceptual clusters or units due to their spatial proximity, while **Negative examples** show **shapes that are more scattered or isolated**, with no clear grouping by proximity.\n\n---\n\n### Detailed Analysis:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1**: Two small clusters \u2014 one on the right (white, magenta, yellow triangles) and one on the bottom (purple, dark green, light yellow triangles). Each cluster is tightly grouped, so the eye perceives them as separate units.\n- **Image 2**: Two distinct groups \u2014 one upper (green, light blue triangles) and one lower (white, light orange triangles). Again, proximity creates clear groupings.\n- **Image 3**: Two groups \u2014 one upper-left (green plus sign, green circle, brown triangle) and one lower-center (yellow, purple, cyan triangles). The close spacing within each group leads to perceptual grouping.\n\n\u2705 In all positive cases, **shapes are arranged in tight clusters**, and the principle of proximity causes the viewer to perceive them as **separate groups**.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4**: Shapes are **widely spaced** \u2014 orange circle and brown triangle are near each other, but the green triangle and white triangle are isolated. The two blue triangles are close, but the rest are too far to form a coherent group. No strong perceptual grouping.\n- **Image 5**: Shapes are **scattered** \u2014 pink circle and brown triangle are close, but the gray square, purple diamond, and green tree are far apart. No clear clusters.\n- **Image 6**: Two small pairs \u2014 blue diamond with white circle, and green triangle with yellow circle \u2014 but they are **too far apart from each other** to form a single perceptual group. The overall layout lacks a strong grouping structure.\n\n\u274c In all negative cases, **shapes are either too isolated or too sparsely distributed** to form clear perceptual groups via proximity.\n\n---\n\n### Final Rule:\n\n> **Positive examples** contain **at least one cluster of shapes that are close together**, forming a perceptual group due to **proximity**.  \n> **Negative examples** lack such tight groupings \u2014 shapes are **scattered or too far apart**, so **no strong perceptual grouping** occurs via proximity.\n\nThis aligns directly with the **Gestalt principle of proximity**: elements that are close together are perceived as a group, while those that are far apart are seen as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "026_26_non_overlap_red_triangle_rel_shape_2_m_irrel_size_all": {
+        "accuracy": 50.0,
+        "f1_score": 0,
+        "precision": 0,
+        "recall": 0.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **groups of shapes that are close together**, forming **perceived clusters or units** due to their spatial proximity, even if they differ in color or shape.  \n> **Negative examples** show **shapes that are scattered or isolated**, with **no clear grouping** due to **lack of proximity** \u2014 they appear as individual, unrelated elements.\n\n---\n\n### Detailed Breakdown:\n\n#### \u2705 Positive Examples (Images 1\u20133):\n\n- **Image 1**: Two small clusters \u2014 one with 3 triangles (teal, white, green) grouped closely in the top-left; another with 3 triangles (light blue, orange, gray) grouped in the top-right. The proximity creates two distinct visual groups.\n- **Image 2**: Two clear clusters \u2014 three white triangles grouped on the left, and three colored triangles (green, red, orange) grouped on the top-right. Proximity defines the groups.\n- **Image 3**: Two clusters \u2014 on the left, three triangles (white, orange, gray) are close; on the right, two triangles (green, white) are close. Again, proximity creates grouping.\n\n\u2192 In all positive cases, **shapes are arranged in tight clusters**, and the viewer naturally perceives them as **separate groups** due to proximity.\n\n---\n\n#### \u274c Negative Examples (Images 4\u20136):\n\n- **Image 4**: Shapes are scattered \u2014 a small group of 3 shapes (blue circle, white star, brown triangle) in the top-center, and another group of 4 shapes (pink, blue, red, green triangles) in the bottom-right. But the **distance between these two groups is large**, and **within each group, the shapes are not tightly clustered**. The overall layout lacks strong grouping.\n- **Image 5**: Two small, distant clusters \u2014 one with 3 shapes (green, light green, pink) in the top-center; another with 3 shapes (light blue, purple plus, yellow) in the bottom-right. Again, **large gaps between clusters** and **loose internal grouping**.\n- **Image 6**: Two very small, distant clusters \u2014 one with 2 shapes (purple star, pink circle) in the bottom-left; another with 3 shapes (teal triangle, white circle, orange circle) in the top-right. The **spatial separation is too great** to form a strong perceptual grouping.\n\n\u2192 In all negative cases, **shapes are either too far apart or not arranged closely enough** to trigger the Gestalt principle of proximity. The viewer perceives them as **individual elements**, not as grouped units.\n\n---\n\n### Final Rule:\n\n> **Positive examples** exhibit **clear, tight groupings of shapes due to proximity**, leading to the perception of distinct clusters.  \n> **Negative examples** lack such tight groupings \u2014 shapes are **scattered or too far apart**, so **proximity does not create perceptual units**.\n\nThis aligns directly with the **Gestalt principle of proximity**: **elements that are close together are perceived as a group**, while those that are far apart are perceived as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "027_27_non_overlap_red_triangle_rel_shape_2_m_irrel_size_exist": {
+        "accuracy": 50.0,
+        "f1_score": 0.4,
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear groupings of shapes that are close together**, forming distinct clusters where the proximity creates a perceptual grouping.  \n> **Negative examples** show **shapes that are more scattered or evenly spaced**, with no strong perceptual grouping due to lack of close proximity.\n\n---\n\n### Detailed Analysis:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1**: Three shapes (star, circle, circle) are grouped closely at the top-left, and two triangles are grouped closely below them. The close spacing within each cluster creates a clear perception of two separate groups.\n- **Image 2**: Two small clusters \u2014 one at the top (three triangles) and one at the bottom (four triangles). The shapes within each cluster are close to each other, while the clusters are far apart, reinforcing the grouping.\n- **Image 3**: Two distinct clusters \u2014 one at the top-right (star, hexagon, circle) and one at the bottom-left (four triangles). Again, proximity within clusters is strong, and separation between clusters is clear.\n\n\u2192 In all positive examples, **shapes are arranged in tight clusters**, and the **distance between clusters is greater than the distance within clusters**, leading to clear perceptual grouping via proximity.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4**: Shapes are **widely scattered** across the canvas. No two shapes are particularly close; each is isolated. There is **no clear grouping** based on proximity.\n- **Image 5**: Two small clusters (top-left and bottom-right), but the **clusters are not clearly separated** \u2014 the top-left cluster has only 3 shapes, and the bottom-right has 2, but the overall spacing is loose and the clusters are not as distinct as in the positive examples. Also, the shapes are more spread out.\n- **Image 6**: Shapes are **evenly distributed** with no tight clusters. The red triangle at the bottom-left is isolated, and the other shapes are spaced apart without forming cohesive groups.\n\n\u2192 In negative examples, **proximity is weak or absent** \u2014 shapes are either too far apart or arranged in a way that does not create strong perceptual groups.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if it contains at least one cluster of shapes where the distance between shapes within the cluster is significantly smaller than the distance between clusters. This creates a clear perceptual grouping based on the Gestalt principle of proximity. Negative examples lack such distinct clusters \u2014 shapes are either too scattered or not close enough to form coherent groups.**\n\nThis rule aligns with the Gestalt principle of **proximity**, which states that elements that are close to each other are perceived as a group.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    },
+    "028_28_non_overlap_red_triangle_rel_shape_2_l_irrel_size_all": {
+        "accuracy": 100.0,
+        "f1_score": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "logic_rules": "The distinguishing logic based on the **Gestalt principle of proximity** is:\n\n> **Positive examples** show **clear groupings of shapes that are close together**, forming distinct clusters where the proximity of elements leads the viewer to perceive them as a unified group, separate from other clusters.\n\n> **Negative examples** show **shapes that are more scattered or loosely arranged**, with **no strong, clear groupings** based on proximity \u2014 elements are either too far apart or arranged in a way that does not create a strong perceptual grouping.\n\n---\n\n### Detailed Analysis:\n\n#### **Positive Examples (Images 1\u20133):**\n\n- **Image 1**: Two distinct clusters \u2014 one in the top-right (4 triangles close together), one in the bottom-left (4 triangles close together). The spacing between clusters is large, emphasizing the grouping within each cluster.\n- **Image 2**: Two clear clusters \u2014 one on the bottom-left (5 triangles), one on the bottom-right (5 triangles). Each cluster is tightly grouped, and the space between clusters is significant.\n- **Image 3**: Two clusters \u2014 one in the top-right (4 triangles), one in the bottom-left (5 triangles). Again, tight internal proximity within each group, and clear separation between groups.\n\n\u2192 In all positive cases, **proximity creates strong perceptual groups**, and the **distance between groups is greater than the distance within groups**.\n\n---\n\n#### **Negative Examples (Images 4\u20136):**\n\n- **Image 4**: Shapes are spread out. There is a loose cluster of 3 triangles at the top, but the rest are isolated or too far apart to form a clear group. The green triangle is alone in the center, and the white and cream triangles are scattered.\n- **Image 5**: Two small clusters \u2014 one in the top-left (4 shapes, including circles and diamonds), one in the bottom-right (5 triangles). However, the top-left cluster includes **different shapes** (circles, diamonds), which may break the uniformity, and the bottom-right cluster is less tight. Also, the overall layout is more scattered.\n- **Image 6**: Shapes are widely dispersed. There are a few pairs (e.g., gray and white triangle at top-left, pink and yellow near center), but no strong, cohesive groupings. The elements are too far apart to be perceived as grouped by proximity.\n\n\u2192 In negative examples, **proximity does not create clear, stable groupings**. Either the elements are too sparse, or the groupings are weak or ambiguous.\n\n---\n\n### Final Rule:\n\n> **The image is a Positive example if the shapes form one or more distinct, tightly grouped clusters where the distance between elements within a cluster is significantly smaller than the distance between clusters. This strong internal proximity leads to clear perceptual grouping.**\n>\n> **The image is a Negative example if the shapes are scattered or loosely arranged, with no clear, strong groupings based on proximity \u2014 elements are either too far apart or arranged in a way that does not create a unified perceptual group.**\n\nThis directly reflects the **Gestalt principle of proximity**: elements that are close together are perceived as a group, while those farther apart are seen as separate.",
+        "samples": [
+            {
+                "id": "positive_0",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_1",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "positive_2",
+                "label": 1,
+                "predicted": 1,
+                "response": "positive"
+            },
+            {
+                "id": "negative_0",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_1",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            },
+            {
+                "id": "negative_2",
+                "label": 0,
+                "predicted": 0,
+                "response": "negative"
+            }
+        ]
+    }
+}
