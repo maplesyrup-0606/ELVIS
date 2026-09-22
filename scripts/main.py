@@ -281,27 +281,31 @@ def save_principle_patterns(args, principle_name, pattern_dicts):
     os.makedirs(resolution_folder, exist_ok=True)
     principle_path = resolution_folder / principle_name
     os.makedirs(principle_path, exist_ok=True)
-    file_utils.remove_folder(principle_path)
+
+    splits = getattr(args, "splits", None) or ["train", "test"]
+    num_samp = args.num_samples if getattr(args, "num_samples", None) is not None else config.get_num_samples(args.lite)
+
+    for split in splits:
+        file_utils.remove_folder(principle_path / split)
+
     pattern_counter = 0
-    num_samp = config.get_num_samples(args.lite)
     rtpt = RTPT(name_initials='JS', experiment_name=f'Elvis-Gen-{principle_name}', max_iterations=len(pattern_dicts))
     rtpt.start()
     for pattern in tqdm(pattern_dicts):
         rtpt.step()
         pattern_name = f"{pattern_counter:03d}_" + pattern["name"]
-        # Run the save_patterns function if it exists in the script
         group_num = pattern["name"].split("_")[-1]
-        qualifier_all = True if "all" in pattern_name else False
-        qualifier_exist = True if "exist" in pattern_name else False
-        prop_shape = True if "shape" in pattern_name else False
-        prop_color = True if "color" in pattern_name else False
-        prop_count = True if "count" in pattern_name else False
-        prop_size = True if "size" in pattern_name else False
-        non_overlap = True if "non_overlap" in pattern_name else False
+        qualifier_all = "all" in pattern_name
+        qualifier_exist = "exist" in pattern_name
+        prop_shape = "shape" in pattern_name
+        prop_color = "color" in pattern_name
+        prop_count = "count" in pattern_name
+        prop_size = "size" in pattern_name
+        non_overlap = "non_overlap" in pattern_name
         pattern_data = {
             "principle": principle_name,
             "id": pattern_counter,
-            "num": config.get_num_samples(args.lite),
+            "num": num_samp,
             "group_num": group_num,
             "qualifier_all": qualifier_all,
             "qualifier_exist": qualifier_exist,
@@ -312,24 +316,16 @@ def save_principle_patterns(args, principle_name, pattern_dicts):
             "prop_count": prop_count,
             "resolution": args.img_size
         }
-        # print(f"{pattern_counter}/{len(pattern_dicts)} Generating {principle_name} pattern {pattern_name}...")
-        train_path = principle_path / "train" / pattern_name
-        test_path = principle_path / "test" / pattern_name
-        os.makedirs(train_path, exist_ok=True)
-        os.makedirs(train_path / "positive", exist_ok=True)
-        os.makedirs(train_path / "negative", exist_ok=True)
-        os.makedirs(test_path, exist_ok=True)
-        os.makedirs(test_path / "positive", exist_ok=True)
-        os.makedirs(test_path / "negative", exist_ok=True)
-        train_pos_imgs = save_patterns(args, pattern_data, pattern, train_path / "positive", num_samples=num_samp, is_positive=True)
-        train_neg_imgs = save_patterns(args, pattern_data, pattern, train_path / "negative", num_samples=num_samp, is_positive=False)
-        test_pos_imgs = save_patterns(args, pattern_data, pattern, test_path / "positive", num_samples=num_samp, is_positive=True)
-        test_neg_imgs = save_patterns(args, pattern_data, pattern, test_path / "negative", num_samples=num_samp, is_positive=False)
-        # Save overview images
-        save_task_overview_image(train_pos_imgs, train_neg_imgs, principle_path / "train" / f"{pattern_name}.png", args.img_size)
-        save_task_overview_image(test_pos_imgs, test_neg_imgs, principle_path / "test" / f"{pattern_name}.png", args.img_size)
+
+        for split in splits:
+            split_path = principle_path / split / pattern_name
+            os.makedirs(split_path / "positive", exist_ok=True)
+            os.makedirs(split_path / "negative", exist_ok=True)
+            pos_imgs = save_patterns(args, pattern_data, pattern, split_path / "positive", num_samples=num_samp, is_positive=True)
+            neg_imgs = save_patterns(args, pattern_data, pattern, split_path / "negative", num_samples=num_samp, is_positive=False)
+            save_task_overview_image(pos_imgs, neg_imgs, principle_path / split / f"{pattern_name}.png", args.img_size)
         pattern_counter += 1
-    print(f"{principle_name} pattern generation complete.")
+    print(f"{principle_name} pattern generation complete for splits: {splits} at {num_samp} samples/side.")
 
 
 def main(args):
@@ -357,6 +353,10 @@ if __name__ == "__main__":
     parser.add_argument("--img_size", type=int, choices=[112, 224, 448, 1024])
     parser.add_argument("--labelOn", action="store_true", help="Show labels on the generated images.")
     parser.add_argument("--shape_quantity", type=str, choices=["s", "m"])
+    parser.add_argument("--num_samples", type=int, default=None,
+                        help="Override number of samples per side per pattern. Defaults to config.get_num_samples(args.lite).")
+    parser.add_argument("--splits", type=str, nargs="+", choices=["train", "test"], default=["train", "test"],
+                        help="Which splits to (re)generate. Only the selected splits are wiped and rewritten.")
     args = parser.parse_args()
 
     main(args)

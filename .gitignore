@@ -184,3 +184,9 @@ cython_debug/
 logs/
 reports/
 wandb/
+
+# OS / editor
+.DS_Store
+
+# PDFs (papers, drafts — not source)
+*.pdf
