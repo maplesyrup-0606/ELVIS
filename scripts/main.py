@@ -277,9 +277,15 @@ def save_task_overview_image(pos_imgs, neg_imgs, save_path, img_size, margin=8, 
 
 
 def save_principle_patterns(args, principle_name, pattern_dicts):
-    resolution_folder = config.get_raw_patterns_path(args.remote) / f"res_{args.img_size}_pin_{config.prin_in_neg}"
-    os.makedirs(resolution_folder, exist_ok=True)
-    principle_path = resolution_folder / principle_name
+    # When ELVIS_DATA is set, write directly under $ELVIS_DATA/{principle}/ to match
+    # the convention used by scripts/evaluate_models.py. Otherwise fall back to the
+    # legacy res_{img_size}_pin_{prin_in_neg}/ prefix used by the Docker/remote layout.
+    if os.getenv("ELVIS_DATA"):
+        principle_path = config.get_raw_patterns_path(args.remote) / principle_name
+    else:
+        resolution_folder = config.get_raw_patterns_path(args.remote) / f"res_{args.img_size}_pin_{config.prin_in_neg}"
+        os.makedirs(resolution_folder, exist_ok=True)
+        principle_path = resolution_folder / principle_name
     os.makedirs(principle_path, exist_ok=True)
 
     splits = getattr(args, "splits", None) or ["train", "test"]
