@@ -89,7 +89,8 @@ def evaluate_llm(model, processor, test_images, logic_rules, principle):
 
 
 def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
-                       batch_size, img_num, start_num, task_num):
+                       batch_size, img_num, start_num, task_num,
+                       adapter_path=None, output_dir=None):
     principle_path = Path(data_path)
     pattern_folders = sorted(file_utils.list_folders(str(principle_path / "train")))
     if not pattern_folders:
@@ -100,9 +101,16 @@ def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
         pattern_folders = pattern_folders[start_num:start_num + int(task_num)]
 
     model, processor = load_qwen_model(model_id)
+    if adapter_path is not None:
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, adapter_path)
+        print(f"[eval] Loaded LoRA adapter from {adapter_path}")
 
     date_str = date.today().strftime("%Y%m%d")
-    output_dir = config.get_results_path(principle) / "baseline" / date_str
+    if output_dir is None:
+        output_dir = config.get_results_path(principle) / "baseline" / date_str
+    else:
+        output_dir = Path(output_dir)
     os.makedirs(output_dir, exist_ok=True)
     filename = f"{model_name}_baseline_{img_size}_{timestamp}_img_num_{img_num}.json"
     tmp_path = output_dir / f"{filename}.tmp.json"

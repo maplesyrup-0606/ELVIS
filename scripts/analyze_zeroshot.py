@@ -13,12 +13,21 @@ PRINCIPLES = ["proximity", "similarity", "closure", "symmetry", "continuity"]
 def parse_filename(path):
     name = path.stem
     mode = "zs_named" if "zs_named" in name else "zs_blind"
-    if "InternVL3" in name:
-        model = name.split("_zs_")[0]
-    elif "llava" in name:
+    # Any prefix-based model (InternVL3-*, Qwen3-VL-*, LLaVA-OV-1.5-*, etc.)
+    # gets split on the mode separator.
+    matched = False
+    model = "unknown"
+    for prefix in ("InternVL3", "Qwen3-VL", "LLaVA-OV-1.5", "Phi4-multimodal", "DeepSeek-VL2"):
+        if name.startswith(prefix):
+            for sep in ("_zs_", "_baseline_"):
+                if sep in name:
+                    model = name.split(sep)[0]
+                    matched = True
+                    break
+            if matched:
+                break
+    if not matched and "llava" in name:
         model = "llava"
-    else:
-        model = "unknown"
     return model, mode
 
 
@@ -38,22 +47,25 @@ def main():
     summary = defaultdict(lambda: defaultdict(dict))
 
     for principle in PRINCIPLES:
-        zeroshot_dir = RESULTS_DIR / principle / "zeroshot"
-        if not zeroshot_dir.exists():
-            continue
-        for date_dir in sorted(zeroshot_dir.iterdir()):
-            for json_file in sorted(date_dir.glob("*.json")):
-                model, mode = parse_filename(json_file)
-                avg_acc, ambiguous, total_samples, num_tasks = load_results(json_file)
-                summary[model][mode][principle] = {
-                    "accuracy": avg_acc,
-                    "ambiguous": ambiguous,
-                    "total_samples": total_samples,
-                    "num_tasks": num_tasks,
-                }
+        for mode_dir in ["baseline", "zeroshot"]:
+            results_dir = RESULTS_DIR / principle / mode_dir
+            if not results_dir.exists():
+                continue
+            for date_dir in sorted(results_dir.iterdir()):
+                for json_file in sorted(date_dir.glob("*.json")):
+                    model, mode = parse_filename(json_file)
+                    if mode_dir == "baseline":
+                        mode = "baseline"
+                    avg_acc, ambiguous, total_samples, num_tasks = load_results(json_file)
+                    summary[model][mode][principle] = {
+                        "accuracy": avg_acc,
+                        "ambiguous": ambiguous,
+                        "total_samples": total_samples,
+                        "num_tasks": num_tasks,
+                    }
 
     models = sorted(summary.keys())
-    modes = ["zs_named", "zs_blind"]
+    modes = ["baseline", "zs_named", "zs_blind"]
 
     for mode in modes:
         print(f"\n{'='*70}")
