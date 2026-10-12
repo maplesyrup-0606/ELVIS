@@ -2,6 +2,7 @@
 
 import sys
 import os
+import random
 import numpy as np
 import cv2
 import argparse
@@ -335,6 +336,10 @@ def save_principle_patterns(args, principle_name, pattern_dicts):
 
 
 def main(args):
+    # Generators draw from both `random` and `np.random`; seed both for reproducible splits.
+    if args.seed is not None:
+        random.seed(args.seed)
+        np.random.seed(args.seed)
     principles = {
         # "od": object_patterns.pattern_dicts,
         "proximity": prox_patterns.get_patterns(args.lite),
@@ -361,8 +366,12 @@ if __name__ == "__main__":
     parser.add_argument("--shape_quantity", type=str, choices=["s", "m"])
     parser.add_argument("--num_samples", type=int, default=None,
                         help="Override number of samples per side per pattern. Defaults to config.get_num_samples(args.lite).")
-    parser.add_argument("--splits", type=str, nargs="+", choices=["train", "test"], default=["train", "test"],
-                        help="Which splits to (re)generate. Only the selected splits are wiped and rewritten.")
+    parser.add_argument("--splits", type=str, nargs="+", choices=["train", "test", "ft_train", "ft_val"],
+                        default=["train", "test"],
+                        help="Which splits to (re)generate. Only the selected splits are wiped and rewritten. "
+                             "ft_train/ft_val are fine-tuning splits, kept separate from the train/test eval splits.")
+    parser.add_argument("--seed", type=int, default=None,
+                        help="Seed `random` and `np.random` before generation. Default: unseeded.")
     args = parser.parse_args()
 
     main(args)
