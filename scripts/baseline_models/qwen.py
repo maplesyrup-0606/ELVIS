@@ -42,7 +42,7 @@ def _qwen_generate(model, processor, messages, max_new_tokens):
     return processor.batch_decode(trimmed, skip_special_tokens=True)[0]
 
 
-def infer_logic_rules(model, processor, train_positive, train_negative, principle):
+def infer_logic_rules(model, processor, train_positive, train_negative, principle, max_new_tokens=128):
     content = []
     for img in train_positive:
         content.append({"type": "image", "image": img})
@@ -57,7 +57,7 @@ def infer_logic_rules(model, processor, train_positive, train_negative, principl
         f"Focus on the Gestalt principle of {principle}."
     )})
     messages = [{"role": "user", "content": content}]
-    return _qwen_generate(model, processor, messages, max_new_tokens=128)
+    return _qwen_generate(model, processor, messages, max_new_tokens=max_new_tokens)
 
 
 def evaluate_llm(model, processor, test_images, logic_rules, principle):
@@ -90,7 +90,7 @@ def evaluate_llm(model, processor, test_images, logic_rules, principle):
 
 def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
                        batch_size, img_num, start_num, task_num,
-                       adapter_path=None, output_dir=None):
+                       adapter_path=None, output_dir=None, rule_max_new_tokens=128):
     principle_path = Path(data_path)
     pattern_folders = sorted(file_utils.list_folders(str(principle_path / "train")))
     if not pattern_folders:
@@ -126,7 +126,8 @@ def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
         test_positive = load_images((principle_path / "test" / pattern_folder.name) / "positive", img_size, img_num)
         test_negative = load_images((principle_path / "test" / pattern_folder.name) / "negative", img_size, img_num)
 
-        logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, principle)
+        logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, principle,
+                                        max_new_tokens=rule_max_new_tokens)
         test_images = (
             [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
             [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
