@@ -90,13 +90,16 @@ def evaluate_llm(model, processor, test_images, logic_rules, principle):
 
 def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
                        batch_size, img_num, start_num, task_num,
-                       adapter_path=None, output_dir=None, rule_max_new_tokens=128, rules=None):
+                       adapter_path=None, output_dir=None, rule_max_new_tokens=128, rules=None,
+                       examples_split="train", test_split="test"):
     """rules: optional {pattern folder name: rule text}. When given, Stage 1 (the model
-    writing a rule from the examples) is skipped and the given rule is used instead."""
+    writing a rule from the examples) is skipped and the given rule is used instead.
+    examples_split / test_split: folders holding the Stage 1 examples and the test
+    images (e.g. train_v3 / test_v3 for the set generated with the fixed generators)."""
     principle_path = Path(data_path)
-    pattern_folders = sorted(file_utils.list_folders(str(principle_path / "train")))
+    pattern_folders = sorted(file_utils.list_folders(str(principle_path / examples_split)))
     if not pattern_folders:
-        print("No pattern folders found in", principle_path / "train")
+        print("No pattern folders found in", principle_path / examples_split)
         return
 
     if task_num != "full":
@@ -125,8 +128,8 @@ def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
         print(f"Evaluating pattern: {pattern_folder.name}")
         train_positive = load_images(pattern_folder / "positive", img_size, img_num)
         train_negative = load_images(pattern_folder / "negative", img_size, img_num)
-        test_positive = load_images((principle_path / "test" / pattern_folder.name) / "positive", img_size, img_num)
-        test_negative = load_images((principle_path / "test" / pattern_folder.name) / "negative", img_size, img_num)
+        test_positive = load_images((principle_path / test_split / pattern_folder.name) / "positive", img_size, img_num)
+        test_negative = load_images((principle_path / test_split / pattern_folder.name) / "negative", img_size, img_num)
 
         if rules is not None:
             logic_rules = rules[pattern_folder.name]
