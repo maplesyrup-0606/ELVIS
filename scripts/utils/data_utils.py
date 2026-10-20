@@ -109,6 +109,18 @@ def get_random_sizes(obj_num, obj_size):
     return sizes
 
 
+def get_distinct_random_sizes(obj_num, obj_size, min_ratio=1.5):
+    """get_random_sizes, re-drawn until largest/smallest >= min_ratio.
+
+    For negatives that break size: plain random sizes are occasionally almost equal
+    (e.g. 1.08x), which makes the violation invisible at 224 px.
+    """
+    while True:
+        sizes = get_random_sizes(obj_num, obj_size)
+        if obj_num < 2 or max(sizes) / min(sizes) >= min_ratio:
+            return sizes
+
+
 def get_shapes(obj_num, allowed_shapes):
     return random.choices(allowed_shapes, k=obj_num)
 

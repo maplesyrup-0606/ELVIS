@@ -73,7 +73,7 @@ def feature_closure_circle(is_positive, clu_num, params, irrel_params, cf_params
                 sizes = [obj_size] * obj_num
                 sizes += [clu_size]
             else:
-                sizes = data_utils.get_random_sizes(obj_num, obj_size)
+                sizes = data_utils.get_distinct_random_sizes(obj_num, obj_size)
                 sizes += [clu_size]
             if "size" in irrel_params:
                 sizes = [size_val] * obj_num + [clu_size]

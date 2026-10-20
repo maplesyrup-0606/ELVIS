@@ -64,11 +64,15 @@ def feature_closure_square(is_positive, clu_num, params, irrel_params, cf_params
                 colors = [color_val] * obj_num
 
             if "size" not in cf_params:
-                sizes = data_utils.get_random_sizes(obj_num, obj_size)
+                sizes = data_utils.get_distinct_random_sizes(obj_num, obj_size)
             else:
                 sizes = [obj_size] * obj_num
             if "size" in irrel_params:
                 sizes = [size_val] * obj_num
+            # Closure broken: scatter the pieces (as in feature_triangle), so the
+            # illusory square is not present in every negative.
+            if not is_positive and "closure" not in cf_params:
+                positions = pos_utils.get_random_positions(obj_num, obj_size)
 
         group_id = -1 if is_random else i
         objs += encode_utils.encode_scene(positions, sizes, colors, shapes,
@@ -101,7 +105,7 @@ def get_logic_rules(is_positive, params, cf_params, irrel_params):
 
 
 def non_overlap_feature_square(params, irrel_params, is_positive, clu_num, pin):
-    cf_params = data_utils.get_proper_sublist(params)
+    cf_params = data_utils.get_proper_sublist(params + ["closure"])
     t = 0
     tt = 0
     objs = feature_closure_square(is_positive, clu_num, params, irrel_params, cf_params, pin, t)

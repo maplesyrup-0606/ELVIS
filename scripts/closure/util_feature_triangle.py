@@ -69,7 +69,7 @@ def feature_closure_triangle(is_positive, clu_num, params, irrel_params, cf_para
                 colors = [color_val] * obj_num
 
             if "size" not in cf_params:
-                sizes = data_utils.get_random_sizes(obj_num, obj_size)
+                sizes = data_utils.get_distinct_random_sizes(obj_num, obj_size)
             else:
                 sizes = [obj_size] * obj_num
             if "size" in irrel_params:

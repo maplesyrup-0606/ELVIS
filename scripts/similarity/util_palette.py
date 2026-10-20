@@ -68,6 +68,14 @@ def similarity_palette(obj_size, params, irrel_params, cf_params, is_positive, c
     num_objects_per_cluster = config.standard_quantity_dict[quantity] // 2
 
     all_positions = generate_cluster_positions(clu_num, num_rings, obj_size, num_objects_per_cluster)
+    # Fixed: "count" used to be ignored (wedges always hold equal counts), so count-broken
+    # negatives were identical to positives. Now drop objects so wedge counts differ.
+    if "count" in params and not is_positive and "count" not in cf_params:
+        full = all_positions
+        while True:
+            all_positions = [random.sample(w, len(w) - random.randint(1, max(1, len(w) // 3))) for w in full]
+            if len({len(w) for w in all_positions}) > 1 or clu_num == 1:
+                break
     logics = {
         "shape": ["circle", "square", "triangle", "circle", "square", "triangle", ],
         "color": random.choices(config.color_large_exclude_gray, k=clu_num),

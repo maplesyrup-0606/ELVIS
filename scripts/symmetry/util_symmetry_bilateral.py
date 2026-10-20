@@ -143,6 +143,9 @@ def axis_symmetry_no_bkg(params, irrel_params, is_positive, clu_num, obj_quantit
 
     if "axis" in params and is_positive or (not is_positive and "axis" in cf_params):
         sym_axis=axis_list[0]
+    elif "axis" in params:
+        # Axis broken: never the positives' axis (random choice hit it 1 in 4 times).
+        sym_axis = random.choice(axis_list[1:])
     else:
         sym_axis = random.choice(axis_list)
     if is_positive or ("symmetry" in cf_params and not is_positive):
