@@ -90,7 +90,9 @@ def evaluate_llm(model, processor, test_images, logic_rules, principle):
 
 def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
                        batch_size, img_num, start_num, task_num,
-                       adapter_path=None, output_dir=None, rule_max_new_tokens=128):
+                       adapter_path=None, output_dir=None, rule_max_new_tokens=128, rules=None):
+    """rules: optional {pattern folder name: rule text}. When given, Stage 1 (the model
+    writing a rule from the examples) is skipped and the given rule is used instead."""
     principle_path = Path(data_path)
     pattern_folders = sorted(file_utils.list_folders(str(principle_path / "train")))
     if not pattern_folders:
@@ -126,8 +128,11 @@ def _run_qwen_baseline(model_id, model_name, data_path, img_size, principle,
         test_positive = load_images((principle_path / "test" / pattern_folder.name) / "positive", img_size, img_num)
         test_negative = load_images((principle_path / "test" / pattern_folder.name) / "negative", img_size, img_num)
 
-        logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, principle,
-                                        max_new_tokens=rule_max_new_tokens)
+        if rules is not None:
+            logic_rules = rules[pattern_folder.name]
+        else:
+            logic_rules = infer_logic_rules(model, processor, train_positive, train_negative, principle,
+                                            max_new_tokens=rule_max_new_tokens)
         test_images = (
             [(img, 1, f"positive_{i}") for i, img in enumerate(test_positive)] +
             [(img, 0, f"negative_{i}") for i, img in enumerate(test_negative)]
